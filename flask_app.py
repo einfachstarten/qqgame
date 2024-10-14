@@ -1,9 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from highscore_manager import qualifies_for_top_10, add_new_high_score, get_top_10_scores
+from config import OPENAI_API_KEY
 import sqlite3
 import logging
 import re
 import csv
+import random
+from openai import OpenAI
+
+client = OpenAI(api_key=OPENAI_API_KEY)
+import time
 from werkzeug.utils import secure_filename
 import os
 
@@ -17,9 +23,10 @@ UPLOAD_FOLDER = '/home/QQgame/qqgame/uploads'
 LOG_FILE_PATH = '/home/QQgame/qqgame/app.log'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 # Configure logging
 logging.basicConfig(
-    filename='/home/QQgame/qqgame/app.log',
+    filename=LOG_FILE_PATH,
     level=logging.DEBUG,
     format='%(asctime)s %(levelname)s: [%(module)s] %(message)s',
 )
@@ -28,7 +35,6 @@ logging.basicConfig(
 def internal_error(error):
     logging.error(f"500 Error: {error}")
     return "Internal Server Error", 500
-
 
 # Delete the log file at application start (optional behavior)
 if os.path.exists(LOG_FILE_PATH):
@@ -59,20 +65,23 @@ def get_categories():
 
 # Function to get categories from the database by ID
 def get_category_by_id(category_id):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("SELECT * FROM categories WHERE id = ?", (category_id,))
-    category = c.fetchone()
-    conn.close()
-    return category
-
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.execute("SELECT * FROM categories WHERE id = ?", (category_id,))
+        category = c.fetchone()
+        conn.close()
+        return category
+    except Exception as e:
+        logging.error(f"[Admin] Error fetching category by ID {category_id}: {e}")
+        return None
 
 # Function to check if table exists for a category
 def table_exists(category):
     try:
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
-        c.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name= ?", (category,))
+        c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name= ?", (category,))
         table = c.fetchone()
         conn.close()
         logging.debug(f"[Admin/Quiz] Table exists check for category '{category}': {table is not None}")
@@ -118,7 +127,6 @@ def question_exists(category, question_text):
     except Exception as e:
         logging.error(f"[Admin] Error checking if question exists: {e}")
         return False
-
 
 # =====================================================
 # 3. CATEGORY MANAGEMENT
@@ -251,7 +259,76 @@ def admin_category_questions(category):
     if not questions:
         logging.warning(f"[Admin] No questions found for category {category}.")
     return render_template('admin_category.html', category=category, questions=questions)
-    
+
+
+# ================================================
+# KI PoC
+# ================================================
+
+@app.route('/generate_quiz_with_ai', methods=['POST', 'GET'])
+def generate_quiz_with_ai():
+    # Loggen des Starts der Anfrage
+    logging.info("[Flask App] Start der Quizgenerierung mit KI.")
+
+    if request.method == 'GET':
+        # Für einen GET-Request: Render ein Formular oder eine Seite
+        logging.info("[Flask App] GET-Request: Quizgenerierungsseite wird angezeigt.")
+        return render_template('generate_quiz.html')  # Die Vorlage, die du bereits hast.
+
+    if request.method == 'POST':
+        try:
+            # Schritt 1: Anfrage von Admin, woher kommt die Anfrage?
+            logging.info("[Flask App] POST-Request: Anfrage vom Admin empfangen.")
+
+            # Schritt 2: Verarbeiten von Nutzereingaben (z.B. Quiztitel, Thema, Anzahl Fragen, Sprache)
+            quiz_title = request.form.get('quiz_title')
+            quiz_topic = request.form.get('quiz_topic')
+            num_questions = int(request.form.get('num_questions', 5))  # Sicherstellen, dass es eine Zahl ist
+            quiz_language = request.form.get('quiz_language')  # Ausgewählte Sprache
+
+            logging.info(f"[Flask App] Quiz Titel: {quiz_title}, Thema: {quiz_topic}, Anzahl der Fragen: {num_questions}, Sprache: {quiz_language}")
+
+            # Schritt 3: Senden der Anfrage an die OpenAI API
+            logging.info("[Flask App] Senden der Anfrage an OpenAI API...")
+
+            # OpenAI API-Anfrage mit der richtigen Methode, dem benötigten Format und der festgelegten Sprache
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "Du bist ein Backend-Assistent für die Erstellung von Quizfragen. Die Fragen und Antworten müssen IMMER faktisch korrekt sein, und dürfen keinesfalls erfunden sein."},
+                    {"role": "user", "content": f"Generiere {num_questions} Quizfragen in der Sprache {quiz_language} für das Thema: {quiz_topic}. Formatiere das Ergebnis in der folgenden JSON-Struktur: [{{'question': 'string', 'choice1': 'string', 'choice2': 'string', 'choice3': 'string', 'choice4': 'string', 'correct_index': int}}]. An welcher Stelle die korrekte Antwort steht, soll immer komplett zufällig zugeordnet werden (zwischen 1 und 4)." }
+                ]
+            )
+
+            logging.info("[Flask App] OpenAI API Anfrage gesendet.")
+
+            # Schritt 4: Überprüfen der Antwort und zufällige Verteilung der richtigen Antwort
+            if response and response.choices:
+                logging.info("[Flask App] OpenAI API Antwort erfolgreich empfangen.")
+                quiz_questions = response.choices[0].message.content
+                logging.info(f"[Flask App] Generierte Fragen im JSON-Format: {quiz_questions}")
+            else:
+                logging.warning("[Flask App] Keine Antwort oder leere Antwort von OpenAI API erhalten.")
+                quiz_questions = "Keine Fragen generiert."
+
+            # Schritt 5: Weiterverarbeitung der erhaltenen Daten und Rückgabe an die HTML-Seite
+            return render_template('generate_quiz.html', generated_questions=quiz_questions)
+
+        except openai.error.RateLimitError as e:  # Correct import of RateLimitError
+            logging.error(f"[Flask App] OpenAI Rate Limit überschritten: {e}")
+            return "Rate Limit überschritten, bitte versuchen Sie es später erneut.", 429
+
+        except openai.error.APIError as e:  # Correct import of APIError
+            logging.error(f"[Flask App] OpenAI API-Fehler: {e}")
+            return f"Fehler beim Abrufen der Antwort von OpenAI: {e}", 500
+
+        except Exception as e:
+            logging.error(f"[Flask App] Ein unbekannter Fehler ist aufgetreten: {e}")
+            return "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.", 500
+
+
+
+
 
 # =====================================================
 # 6. QUESTION MANAGEMENT - ADD, EDIT, DELETE
@@ -423,7 +500,6 @@ def upload_questions(category):
     return redirect(url_for('admin_category_questions', category=category))
 
 
-
 # =====================================================
 # 8. HIGHSCORE FUNCTIONALITY
 # =====================================================
@@ -488,7 +564,6 @@ def admin_high_scores(category):
 def reset_highscores(category):
     reset_highscores_for_category(category)
     return redirect(url_for('admin_high_scores', category=category))
-
 
 
 

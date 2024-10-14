@@ -1,9 +1,37 @@
-2024-10-14 07:41:11,781 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 07:41:11,783 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:41:42,152 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 07:41:42,153 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:41:52,096 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 07:41:52,097 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:46:03,681 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:46:11,723 INFO: [flask_app] [Admin] Fetching questions for category: Allgemeinwissen (schwierig) in admin portal.
-2024-10-14 07:46:11,728 INFO: [flask_app] [Admin/Quiz] Fetching questions for category: Allgemeinwissen (schwierig)
+2024-10-14 14:31:16,733 INFO: [flask_app] [Quiz] Rendering home page with category selection.
+2024-10-14 14:31:16,734 INFO: [flask_app] [Admin] Fetching categories from the database.
+2024-10-14 14:31:22,714 INFO: [flask_app] [Flask App] Start der Quizgenerierung mit KI.
+2024-10-14 14:31:22,714 INFO: [flask_app] [Flask App] GET-Request: Quizgenerierungsseite wird angezeigt.
+2024-10-14 14:31:31,488 INFO: [flask_app] [Flask App] Start der Quizgenerierung mit KI.
+2024-10-14 14:31:31,489 INFO: [flask_app] [Flask App] POST-Request: Anfrage vom Admin empfangen.
+2024-10-14 14:31:31,490 INFO: [flask_app] [Flask App] Quiz Titel: Vokabelquiz, Thema: 2. Klasse Gymnasium Englischvokabeln, Anzahl der Fragen: 3, Sprache: Deutsch
+2024-10-14 14:31:31,490 INFO: [flask_app] [Flask App] Senden der Anfrage an OpenAI API...
+2024-10-14 14:31:34,664 INFO: [_client] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-14 14:31:34,666 INFO: [flask_app] [Flask App] OpenAI API Anfrage gesendet.
+2024-10-14 14:31:34,667 INFO: [flask_app] [Flask App] OpenAI API Antwort erfolgreich empfangen.
+2024-10-14 14:31:34,667 INFO: [flask_app] [Flask App] Generierte Fragen im JSON-Format: [
+    {
+        "question": "Was ist die englische Übersetzung von 'Apfel'?",
+        "choice1": "Banana",
+        "choice2": "Apple",
+        "choice3": "Orange",
+        "choice4": "Pear",
+        "correct_index": 2
+    },
+    {
+        "question": "Was bedeutet 'Hund' auf Englisch?",
+        "choice1": "Cat",
+        "choice2": "Dog",
+        "choice3": "Fish",
+        "choice4": "Bird",
+        "correct_index": 2
+    },
+    {
+        "question": "Wie sagt man 'Schule' auf Englisch?",
+        "choice1": "House",
+        "choice2": "Book",
+        "choice3": "School",
+        "choice4": "Car",
+        "correct_index": 3
+    }
+]
