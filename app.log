@@ -1,8 +1,26 @@
-2024-10-14 09:09:21,165 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 09:09:21,166 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 09:09:22,918 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 09:09:37,426 INFO: [flask_app] [Quiz] Rendering quiz page for category: Past Simple I (2. Gymnasium)
-2024-10-14 09:09:37,431 INFO: [flask_app] [Admin/Quiz] Fetching questions for category: Past Simple I (2. Gymnasium)
-2024-10-14 09:09:38,829 INFO: [flask_app] [Quiz] Fetching questions for category Past Simple I (2. Gymnasium) as JSON.
-2024-10-14 09:10:31,506 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 09:10:31,507 INFO: [flask_app] [Admin] Fetching categories from the database.
+2024-10-14 13:58:49,690 INFO: [flask_app] [Quiz] Rendering home page with category selection.
+2024-10-14 13:58:49,691 INFO: [flask_app] [Admin] Fetching categories from the database.
+2024-10-14 13:58:52,716 INFO: [flask_app] [Flask App] Start der Quizgenerierung mit KI.
+2024-10-14 13:58:52,716 INFO: [flask_app] [Flask App] POST-Request: Anfrage vom Admin empfangen.
+2024-10-14 13:58:52,717 INFO: [flask_app] [Flask App] Kategorie: Österreich Quiz, Anzahl der Fragen: 5
+2024-10-14 13:58:52,717 INFO: [flask_app] [Flask App] Senden der Anfrage an OpenAI API...
+2024-10-14 13:58:55,447 INFO: [_client] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-14 13:58:55,452 INFO: [flask_app] [Flask App] OpenAI API Anfrage gesendet.
+2024-10-14 13:58:55,452 INFO: [flask_app] [Flask App] OpenAI API Antwort erfolgreich empfangen.
+2024-10-14 13:58:55,453 INFO: [flask_app] [Flask App] Generierte Fragen: 1. What is the capital city of Austria?
+2. Which famous composer was born in Austria and is known for his classical music compositions?
+3. In which year did Austria join the European Union?
+4. What are the colors of the Austrian flag?
+5. The Habsburg Monarchy, which was ruled by the House of Habsburg, was centered in which city in Austria?
+2024-10-14 14:01:14,026 INFO: [flask_app] [Flask App] Start der Quizgenerierung mit KI.
+2024-10-14 14:01:14,027 INFO: [flask_app] [Flask App] POST-Request: Anfrage vom Admin empfangen.
+2024-10-14 14:01:14,027 INFO: [flask_app] [Flask App] Kategorie: Englischvokabeln 2. Klasse Gymnasium, Anzahl der Fragen: 5
+2024-10-14 14:01:14,028 INFO: [flask_app] [Flask App] Senden der Anfrage an OpenAI API...
+2024-10-14 14:01:17,025 INFO: [_client] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-14 14:01:17,026 INFO: [flask_app] [Flask App] OpenAI API Anfrage gesendet.
+2024-10-14 14:01:17,026 INFO: [flask_app] [Flask App] OpenAI API Antwort erfolgreich empfangen.
+2024-10-14 14:01:17,027 INFO: [flask_app] [Flask App] Generierte Fragen: 1. Was ist die englische Übersetzung für "Haus"? (What is the English translation for "Haus"?)
+2. Wie sagt man auf Englisch "Auto"? (How do you say "Auto" in English?)
+3. Übersetze das Wort "Schule" ins Englische. (Translate the word "Schule" into English.)
+4. Was bedeutet "Buch" auf Englisch? (What does "Buch" mean in English?)
+5. Welches englische Wort steht für "Tisch"? (Which English word means "Tisch"?)
