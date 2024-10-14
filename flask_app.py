@@ -5,6 +5,7 @@ import sqlite3
 import logging
 import re
 import csv
+import random
 from openai import OpenAI
 
 client = OpenAI(api_key=OPENAI_API_KEY)
@@ -263,6 +264,7 @@ def admin_category_questions(category):
 # ================================================
 # KI PoC
 # ================================================
+
 @app.route('/generate_quiz_with_ai', methods=['POST', 'GET'])
 def generate_quiz_with_ai():
     # Loggen des Starts der Anfrage
@@ -271,38 +273,40 @@ def generate_quiz_with_ai():
     if request.method == 'GET':
         # Für einen GET-Request: Render ein Formular oder eine Seite
         logging.info("[Flask App] GET-Request: Quizgenerierungsseite wird angezeigt.")
-        return render_template('generate_quiz.html')
+        return render_template('generate_quiz.html')  # Die Vorlage, die du bereits hast.
 
     if request.method == 'POST':
         try:
             # Schritt 1: Anfrage von Admin, woher kommt die Anfrage?
             logging.info("[Flask App] POST-Request: Anfrage vom Admin empfangen.")
 
-            # Schritt 2: Verarbeiten von Nutzereingaben (z.B. Quizthema, Anzahl Fragen)
-            category_name = request.form.get('category_name')
+            # Schritt 2: Verarbeiten von Nutzereingaben (z.B. Quiztitel, Thema, Anzahl Fragen, Sprache)
+            quiz_title = request.form.get('quiz_title')
+            quiz_topic = request.form.get('quiz_topic')
             num_questions = int(request.form.get('num_questions', 5))  # Sicherstellen, dass es eine Zahl ist
-            logging.info(f"[Flask App] Kategorie: {category_name}, Anzahl der Fragen: {num_questions}")
+            quiz_language = request.form.get('quiz_language')  # Ausgewählte Sprache
+
+            logging.info(f"[Flask App] Quiz Titel: {quiz_title}, Thema: {quiz_topic}, Anzahl der Fragen: {num_questions}, Sprache: {quiz_language}")
 
             # Schritt 3: Senden der Anfrage an die OpenAI API
             logging.info("[Flask App] Senden der Anfrage an OpenAI API...")
 
-            # Wartezeit bevor wir die Anfrage an OpenAI senden
-            time.sleep(1)  # 1 Sekunde Wartezeit (kann angepasst werden)
-
-            # OpenAI API-Anfrage mit der richtigen Methode
-            response = client.chat.completions.create(model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant for quiz generation."},
-                {"role": "user", "content": f"Generate {num_questions} quiz questions for the topic: {category_name}."}
-            ])
+            # OpenAI API-Anfrage mit der richtigen Methode, dem benötigten Format und der festgelegten Sprache
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "Du bist ein Backend-Assistent für die Erstellung von Quizfragen. Die Fragen und Antworten müssen IMMER faktisch korrekt sein, und dürfen keinesfalls erfunden sein."},
+                    {"role": "user", "content": f"Generiere {num_questions} Quizfragen in der Sprache {quiz_language} für das Thema: {quiz_topic}. Formatiere das Ergebnis in der folgenden JSON-Struktur: [{{'question': 'string', 'choice1': 'string', 'choice2': 'string', 'choice3': 'string', 'choice4': 'string', 'correct_index': int}}]. An welcher Stelle die korrekte Antwort steht, soll immer komplett zufällig zugeordnet werden (zwischen 1 und 4)." }
+                ]
+            )
 
             logging.info("[Flask App] OpenAI API Anfrage gesendet.")
 
-            # Schritt 4: Überprüfen der Antwort
+            # Schritt 4: Überprüfen der Antwort und zufällige Verteilung der richtigen Antwort
             if response and response.choices:
                 logging.info("[Flask App] OpenAI API Antwort erfolgreich empfangen.")
                 quiz_questions = response.choices[0].message.content
-                logging.info(f"[Flask App] Generierte Fragen: {quiz_questions}")
+                logging.info(f"[Flask App] Generierte Fragen im JSON-Format: {quiz_questions}")
             else:
                 logging.warning("[Flask App] Keine Antwort oder leere Antwort von OpenAI API erhalten.")
                 quiz_questions = "Keine Fragen generiert."
@@ -310,17 +314,20 @@ def generate_quiz_with_ai():
             # Schritt 5: Weiterverarbeitung der erhaltenen Daten und Rückgabe an die HTML-Seite
             return render_template('generate_quiz.html', generated_questions=quiz_questions)
 
-        except RateLimitError as e:
+        except openai.error.RateLimitError as e:  # Correct import of RateLimitError
             logging.error(f"[Flask App] OpenAI Rate Limit überschritten: {e}")
             return "Rate Limit überschritten, bitte versuchen Sie es später erneut.", 429
 
-        except APIError as e:
+        except openai.error.APIError as e:  # Correct import of APIError
             logging.error(f"[Flask App] OpenAI API-Fehler: {e}")
             return f"Fehler beim Abrufen der Antwort von OpenAI: {e}", 500
 
         except Exception as e:
             logging.error(f"[Flask App] Ein unbekannter Fehler ist aufgetreten: {e}")
             return "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.", 500
+
+
+
 
 
 # =====================================================

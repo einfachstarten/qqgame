@@ -4,26 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neues Spiel mit KI hinzufügen</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin_style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Neues Spiel mit KI hinzufügen</h1>
-        <form method="POST" action="{{ url_for('generate_quiz_with_ai') }}">
-            <div class="form-group">
-                <label for="category_name">Spielname:</label>
-                <input type="text" id="category_name" name="category_name" placeholder="Spielname eingeben" required>
-            </div>
+    <h1>Neues Spiel mit KI hinzufügen</h1>
+    <form action="{{ url_for('generate_quiz_with_ai') }}" method="POST">
+        <label for="quiz_title">Spielname:</label>
+        <input type="text" id="quiz_title" name="quiz_title" required placeholder="Spielname eingeben"><br><br>
 
-            <div class="form-group">
-                <label for="question_count">Anzahl der Fragen:</label>
-                <input type="number" id="question_count" name="question_count" placeholder="Anzahl der Fragen" required>
-            </div>
+        <label for="quiz_topic">Thema des Quiz:</label>
+        <input type="text" id="quiz_topic" name="quiz_topic" required placeholder="Thema eingeben"><br><br>
 
-            <button type="submit" class="btn btn-add">Quiz generieren</button>
-        </form>
+        <label for="num_questions">Anzahl der Fragen:</label>
+        <input type="number" id="num_questions" name="num_questions" required min="1" max="100" placeholder="Anzahl der Fragen"><br><br>
 
-        <a href="{{ url_for('admin') }}" class="btn btn-back">Zurück zum Admin-Panel</a>
-    </div>
+        <label for="quiz_language">Sprache der Fragen:</label>
+        <select id="quiz_language" name="quiz_language" required>
+            <option value="Deutsch">Deutsch</option>
+            <option value="Englisch">Englisch</option>
+            <!-- You can add more language options here -->
+        </select><br><br>
+
+        <button type="submit">Quiz generieren</button>
+    </form>
+
+    {% if generated_questions %}
+        <h2>Generierte Quizfragen</h2>
+        <pre>{{ generated_questions }}</pre>
+    {% endif %}
+
+    <br><a href="{{ url_for('admin') }}">Zurück zum Admin-Panel</a>
 </body>
 </html>

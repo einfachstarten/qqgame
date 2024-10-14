@@ -1,26 +1,37 @@
-2024-10-14 13:58:49,690 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 13:58:49,691 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 13:58:52,716 INFO: [flask_app] [Flask App] Start der Quizgenerierung mit KI.
-2024-10-14 13:58:52,716 INFO: [flask_app] [Flask App] POST-Request: Anfrage vom Admin empfangen.
-2024-10-14 13:58:52,717 INFO: [flask_app] [Flask App] Kategorie: Österreich Quiz, Anzahl der Fragen: 5
-2024-10-14 13:58:52,717 INFO: [flask_app] [Flask App] Senden der Anfrage an OpenAI API...
-2024-10-14 13:58:55,447 INFO: [_client] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2024-10-14 13:58:55,452 INFO: [flask_app] [Flask App] OpenAI API Anfrage gesendet.
-2024-10-14 13:58:55,452 INFO: [flask_app] [Flask App] OpenAI API Antwort erfolgreich empfangen.
-2024-10-14 13:58:55,453 INFO: [flask_app] [Flask App] Generierte Fragen: 1. What is the capital city of Austria?
-2. Which famous composer was born in Austria and is known for his classical music compositions?
-3. In which year did Austria join the European Union?
-4. What are the colors of the Austrian flag?
-5. The Habsburg Monarchy, which was ruled by the House of Habsburg, was centered in which city in Austria?
-2024-10-14 14:01:14,026 INFO: [flask_app] [Flask App] Start der Quizgenerierung mit KI.
-2024-10-14 14:01:14,027 INFO: [flask_app] [Flask App] POST-Request: Anfrage vom Admin empfangen.
-2024-10-14 14:01:14,027 INFO: [flask_app] [Flask App] Kategorie: Englischvokabeln 2. Klasse Gymnasium, Anzahl der Fragen: 5
-2024-10-14 14:01:14,028 INFO: [flask_app] [Flask App] Senden der Anfrage an OpenAI API...
-2024-10-14 14:01:17,025 INFO: [_client] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2024-10-14 14:01:17,026 INFO: [flask_app] [Flask App] OpenAI API Anfrage gesendet.
-2024-10-14 14:01:17,026 INFO: [flask_app] [Flask App] OpenAI API Antwort erfolgreich empfangen.
-2024-10-14 14:01:17,027 INFO: [flask_app] [Flask App] Generierte Fragen: 1. Was ist die englische Übersetzung für "Haus"? (What is the English translation for "Haus"?)
-2. Wie sagt man auf Englisch "Auto"? (How do you say "Auto" in English?)
-3. Übersetze das Wort "Schule" ins Englische. (Translate the word "Schule" into English.)
-4. Was bedeutet "Buch" auf Englisch? (What does "Buch" mean in English?)
-5. Welches englische Wort steht für "Tisch"? (Which English word means "Tisch"?)
+2024-10-14 14:31:16,733 INFO: [flask_app] [Quiz] Rendering home page with category selection.
+2024-10-14 14:31:16,734 INFO: [flask_app] [Admin] Fetching categories from the database.
+2024-10-14 14:31:22,714 INFO: [flask_app] [Flask App] Start der Quizgenerierung mit KI.
+2024-10-14 14:31:22,714 INFO: [flask_app] [Flask App] GET-Request: Quizgenerierungsseite wird angezeigt.
+2024-10-14 14:31:31,488 INFO: [flask_app] [Flask App] Start der Quizgenerierung mit KI.
+2024-10-14 14:31:31,489 INFO: [flask_app] [Flask App] POST-Request: Anfrage vom Admin empfangen.
+2024-10-14 14:31:31,490 INFO: [flask_app] [Flask App] Quiz Titel: Vokabelquiz, Thema: 2. Klasse Gymnasium Englischvokabeln, Anzahl der Fragen: 3, Sprache: Deutsch
+2024-10-14 14:31:31,490 INFO: [flask_app] [Flask App] Senden der Anfrage an OpenAI API...
+2024-10-14 14:31:34,664 INFO: [_client] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-14 14:31:34,666 INFO: [flask_app] [Flask App] OpenAI API Anfrage gesendet.
+2024-10-14 14:31:34,667 INFO: [flask_app] [Flask App] OpenAI API Antwort erfolgreich empfangen.
+2024-10-14 14:31:34,667 INFO: [flask_app] [Flask App] Generierte Fragen im JSON-Format: [
+    {
+        "question": "Was ist die englische Übersetzung von 'Apfel'?",
+        "choice1": "Banana",
+        "choice2": "Apple",
+        "choice3": "Orange",
+        "choice4": "Pear",
+        "correct_index": 2
+    },
+    {
+        "question": "Was bedeutet 'Hund' auf Englisch?",
+        "choice1": "Cat",
+        "choice2": "Dog",
+        "choice3": "Fish",
+        "choice4": "Bird",
+        "correct_index": 2
+    },
+    {
+        "question": "Wie sagt man 'Schule' auf Englisch?",
+        "choice1": "House",
+        "choice2": "Book",
+        "choice3": "School",
+        "choice4": "Car",
+        "correct_index": 3
+    }
+]
