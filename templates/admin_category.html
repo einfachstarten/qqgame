@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - {{ category }} Fragen</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='question_style.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ category }} Fragen</h1>
+
+        <!-- Display questions -->
+        <div class="question-container">
+            {% for question in questions %}
+            <form method="POST" action="{{ url_for('add_question_route', category=category) }}">
+                <input type="hidden" name="question_id" value="{{ question[0] }}">
+                <div class="question-item">
+                    <textarea name="question_text" class="input-question" placeholder="Fragentext" required>{{ question[1] }}</textarea>
+                    <div class="answer-container">
+                        <div class="answer-option {% if question[6] == 1 %}correct-answer{% else %}wrong-answer{% endif %}">
+                            <input type="text" name="answer1" class="input-answer" value="{{ question[2] }}" placeholder="Option 1" required>
+                            <input type="radio" name="correct_answer" value="1" {% if question[6] == 1 %}checked{% endif %}>
+                        </div>
+                        <div class="answer-option {% if question[6] == 2 %}correct-answer{% else %}wrong-answer{% endif %}">
+                            <input type="text" name="answer2" class="input-answer" value="{{ question[3] }}" placeholder="Option 2" required>
+                            <input type="radio" name="correct_answer" value="2" {% if question[6] == 2 %}checked{% endif %}>
+                        </div>
+                        <div class="answer-option {% if question[6] == 3 %}correct-answer{% else %}wrong-answer{% endif %}">
+                            <input type="text" name="answer3" class="input-answer" value="{{ question[4] }}" placeholder="Option 3" required>
+                            <input type="radio" name="correct_answer" value="3" {% if question[6] == 3 %}checked{% endif %}>
+                        </div>
+                        <div class="answer-option {% if question[6] == 4 %}correct-answer{% else %}wrong-answer{% endif %}">
+                            <input type="text" name="answer4" class="input-answer" value="{{ question[5] }}" placeholder="Option 4" required>
+                            <input type="radio" name="correct_answer" value="4" {% if question[6] == 4 %}checked{% endif %}>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button type="submit" class="btn-save">
+                            <i class="material-icons">save</i>
+                        </button>
+                        <button type="submit" formaction="{{ url_for('delete_question_route', category=category, question_id=question[0]) }}" class="btn-delete" onclick="return confirm('Bist du sicher, dass du diese Frage löschen möchtest?');">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            {% endfor %}
+        </div>
+
+        <!-- Form to add a new question -->
+        <h2>Neue Frage hinzufügen</h2>
+        <form method="POST" action="{{ url_for('add_question_route', category=category) }}">
+            <div class="question-item">
+                <textarea name="question_text" class="input-question" placeholder="Fragentext" required></textarea>
+                <div class="answer-container">
+                    <div class="answer-option">
+                        <input type="text" name="answer1" class="input-answer" placeholder="Option 1" required>
+                        <input type="radio" name="correct_answer" value="1">
+                    </div>
+                    <div class="answer-option">
+                        <input type="text" name="answer2" class="input-answer" placeholder="Option 2" required>
+                        <input type="radio" name="correct_answer" value="2">
+                    </div>
+                    <div class="answer-option">
+                        <input type="text" name="answer3" class="input-answer" placeholder="Option 3" required>
+                        <input type="radio" name="correct_answer" value="3">
+                    </div>
+                    <div class="answer-option">
+                        <input type="text" name="answer4" class="input-answer" placeholder="Option 4" required>
+                        <input type="radio" name="correct_answer" value="4">
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button type="submit" class="btn-add">
+                        <i class="material-icons">add</i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Form to upload questions via CSV -->
+        <h2>Fragen via CSV hochladen</h2>
+        <form method="POST" action="{{ url_for('upload_questions', category=category) }}" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv" required>
+            <button type="submit" class="btn-upload">CSV hochladen</button>
+        </form>
+
+        <!-- Back to Admin Panel Link -->
+        <a href="{{ url_for('admin') }}" class="btn-back">Zurück zum Admin Panel</a>
+    </div>
+</body>
+</html>

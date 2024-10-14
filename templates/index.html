@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitte wähle ein Spiel aus!</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('{{ url_for('static', filename='service-worker.js') }}')
+                    .then(function(registration) {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    }, function(error) {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='icons/icon-192x192.png') }}" alt="Logo" class="logo">
+    </div>
+
+    <!-- Container for game selection and explanation -->
+    <div class="container">
+        <h1>Bitte wähle ein Spiel aus!</h1>
+        
+        <!-- Explanation text -->
+        <p>Willkommen zum QQ Quizmaster! Wähle eine der folgenden Kategorien und teste dein Wissen zu verschiedenen spannenden Themen. Sei bereit für eine herausfordernde und spaßige Quizreise!</p>
+        
+        <!-- Game categories -->
+        <div class="category-buttons">
+            {% for category in categories %}
+            <a class="category-btn" href="{{ url_for('quiz', category=category[1]) }}">{{ category[1] }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Copyright at the bottom of the page -->
+    <footer>
+        <p>&copy; einfachstarten.jetzt</p>
+    </footer>
+</body>
+</html>

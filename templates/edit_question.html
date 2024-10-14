@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Question</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin_style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Question in {{ category }}</h1>
+
+        <form method="POST" action="{{ url_for('edit_question', category=category, question_id=question[0]) }}">
+            <input type="text" name="question_text" placeholder="Question Text" value="{{ question[1] }}" required>
+            <input type="text" name="choice1" placeholder="Choice 1" value="{{ question[2] }}" required>
+            <input type="text" name="choice2" placeholder="Choice 2" value="{{ question[3] }}" required>
+            <input type="text" name="choice3" placeholder="Choice 3" value="{{ question[4] }}" required>
+            <input type="text" name="choice4" placeholder="Choice 4" value="{{ question[5] }}" required>
+            <input type="text" name="correct" placeholder="Correct Answer" value="{{ question[6] }}" required>
+            <button type="submit">Update Question</button>
+        </form>
+
+        <a href="{{ url_for('admin_category_questions', category=category) }}">Back to Category</a>
+    </div>
+</body>
+</html>

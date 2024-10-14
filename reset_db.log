@@ -1,0 +1,5 @@
+2024-10-11 21:20:16,861 INFO: Existing database deleted successfully.
+2024-10-11 21:20:16,886 INFO: Categories table created successfully.
+2024-10-11 21:20:16,891 INFO: Table for sample category 'movies' created successfully.
+2024-10-11 21:20:16,891 INFO: Sample question added to 'movies' category.
+2024-10-11 21:20:16,910 INFO: Database reset and new tables created successfully.

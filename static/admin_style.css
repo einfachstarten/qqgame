@@ -1,0 +1,121 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Container Styling */
+.container {
+    max-width: 900px;  /* Breitere Container-Breite */
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Headings */
+h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* Category List Styling */
+.category-list {
+    margin-bottom: 30px;
+}
+
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Action Buttons Styling */
+.btn {
+    padding: 5px 10px;  /* Kleinere Buttons */
+    font-size: 12px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background-color: #f39c12;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #e67e22;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+}
+
+/* Highscore Button Styling */
+.btn-highscores {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-highscores:hover {
+    background-color: #2980b9;
+}
+
+/* Add Category Form Styling */
+input[type="text"] {
+    padding: 8px;
+    font-size: 16px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 300px;
+}
+
+.btn-add {
+    padding: 8px 12px;
+    background-color: #2ecc71;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn-add:hover {
+    background-color: #27ae60;
+}
+
+/* admin KI style */
+.admin-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #3498db;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.admin-btn:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}

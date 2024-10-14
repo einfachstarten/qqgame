@@ -1,0 +1,169 @@
+/* General Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #ff79c6, #8be9fd); /* Farbverlauf im Hintergrund */
+    color: #fff;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* Hintergrund soll die gesamte Seite abdecken */
+}
+
+/* Container Styling */
+.container {
+    position: relative;
+    margin: 50px auto;
+    padding: 20px;
+    max-width: 700px;
+    background-color: #4A3A9D; /* Neuer dunklerer Hintergrund */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    border: 3px solid transparent; 
+    background-image: linear-gradient(#1e1e2f, #1e1e2f), radial-gradient(circle at top left, #a8e6ff, #ff6b6b);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    overflow: hidden;
+}
+
+.logo-container {
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.logo {
+    display: block;
+    width: 150px; /* Passe die Größe des Logos nach Bedarf an */
+    height: 150px;
+    background-image: url('{{ url_for('static', filename='icons/icon-192x192.png') }}');
+    background-size: cover;
+    border-radius: 10px; /* Optional, falls du runde Kanten möchtest */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+
+/* Headings */
+h1, h2 {
+    color: white; 
+    font-family: 'Impact', sans-serif;
+    letter-spacing: 2px;
+}
+
+h1 {
+    animation: titleAnimation 1.5s ease-in-out infinite alternate;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #ffffff; /* Weiß für den Fragetext */
+}
+
+/* Buttons */
+button {
+    padding: 15px 30px; 
+    margin: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out, background-color 0.3s;
+}
+
+button:hover {
+    background-color: #a8e6ff;
+    transform: scale(1.1);
+}
+
+/* Category Button Styling */
+.category-btn {
+    display: inline-block;
+    padding: 15px 25px;
+    margin: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #ff79c6; /* Neue Farbe für die Kategorie-Buttons */
+    border-radius: 10px;
+    text-decoration: none;
+    transition: transform 0.3s ease-in-out, background-color 0.3s;
+}
+
+.category-btn:hover {
+    background-color: #a8e6ff;
+    transform: scale(1.2);
+}
+
+/* Quiz Page Styling */
+.question-container {
+    padding: 20px;
+    background-color: #362A73; /* Dunklere Hintergrundfarbe für die Quizbox */
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    border: 2px solid #f1c40f;
+}
+
+/* Answer Button Styling */
+.choice-btn {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    margin: 15px 0;
+    font-size: 22px;
+    background-color: #7f8c8d; 
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.choice-btn:hover {
+    background-color: #95a5a6;
+    transform: scale(1.05);
+}
+
+/* Correct and Wrong Button Styling */
+.choice-btn.wrong {
+    background-color: #e74c3c !important;
+}
+
+.choice-btn.correct {
+    background-color: #2ecc71 !important;
+}
+
+/* Result Text Styling */
+.result {
+    font-size: 24px;
+    margin-top: 20px;
+}
+
+#next-btn {
+    display: none;
+}
+
+/* Animations */
+@keyframes titleAnimation {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Highscores für {{ category }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='highscore_style.css') }}">
+</head>
+<body>
+    <div class="container-highscores">
+        <h1>Highscores für {{ category }}</h1>
+        <table class="table-highscores">
+            <thead>
+                <tr>
+                    <th>Rang</th>
+                    <th>Name</th>
+                    <th>Punkte</th>
+                    <th>Datum</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, score in enumerate(scores) %}
+                    <tr>
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ score.player_name }}</td>
+                        <td>{{ score.score }}</td>
+                        <td>{{ score.timestamp }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form method="POST" action="{{ url_for('reset_highscores', category=category) }}">
+            <button type="submit" class="btn-reset">Highscores zurücksetzen</button>
+        </form>
+    </div>
+</body>
+</html>

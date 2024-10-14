@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin_style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Panel</h1>
+        <h2>Spiele</h2>
+        <div class="category-list">
+            {% for category in categories %}
+            <div class="category-item">
+                <span>{{ category[1] }}</span>
+                <div class="action-buttons">
+                    <!-- Link zur Bearbeitung der Fragen einer Kategorie -->
+                    <a href="{{ url_for('admin_category_questions', category=category[1]) }}" class="btn btn-edit">Fragen bearbeiten</a>
+                    <!-- Löschen der Kategorie -->
+                    <form method="POST" action="{{ url_for('delete_category_route') }}" style="display:inline;">
+                        <input type="hidden" name="category_id" value="{{ category[0] }}">
+                        <button type="submit" class="btn btn-delete" onclick="return confirm('Bist du sicher, dass du diese Kategorie löschen möchtest?');">Löschen</button>
+                    </form>
+                    <!-- Highscore-Link -->
+                    <a href="{{ url_for('admin_high_scores', category=category[1]) }}" class="btn btn-highscores">Highscores</a>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h2>Neues Spiel hinzufügen</h2>
+        <form method="POST" action="{{ url_for('admin') }}">
+            <input type="text" name="category_name" placeholder="Neuer Spielname" required>
+            <button type="submit" class="btn btn-add">Spiel hinzufügen</button>
+        </form>
+    </div>
+</body>
+</html>

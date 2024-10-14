@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QQ Quizmaster</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='quiz_style.css') }}">
+    <style>
+        /* Stelle sicher, dass das Logo gerade dargestellt wird */
+        .logo {
+            display: block;
+            margin: 0 auto;
+            transform: rotate(0deg);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let questions = [];
+    let randomizedQuestions = [];
+    let selectedCategory;
+
+    async function startGame(category) {
+        selectedCategory = category;
+        document.getElementById("intro").style.display = "none";
+        document.getElementById("question-screen").style.display = "block";
+
+        questions = await fetchQuestions();
+        randomizedQuestions = questions.sort(() => 0.5 - Math.random()).slice(0, 10);
+        showQuestion();
+    }
+
+    async function fetchQuestions() {
+        try {
+            const response = await fetch(`/quiz_questions/${selectedCategory}`);
+            if (!response.ok) {
+                throw new Error('Fehler beim Laden der Fragen');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Fehler beim Abrufen der Fragen:', error);
+            return [];
+        }
+    }
+
+    function showQuestion() {
+        const questionData = randomizedQuestions[currentQuestionIndex];
+        document.getElementById("question-text").innerText = questionData.question;
+
+        const choicesDiv = document.getElementById("choices");
+        choicesDiv.innerHTML = "";
+
+        const choices = [questionData.choice1, questionData.choice2, questionData.choice3, questionData.choice4];
+        choices.forEach(choice => {
+            const button = document.createElement("button");
+            button.innerText = choice;
+            button.classList.add('choice-btn');
+            button.onclick = () => checkAnswer(button, choice, questionData.correct);
+            choicesDiv.appendChild(button);
+        });
+
+        document.getElementById("result").innerText = "";
+        document.getElementById("next-btn").style.display = "none";
+        document.getElementById("loading-bar-container").style.display = "none";
+    }
+
+        function checkAnswer(button, selectedChoice, correctAnswer) {
+        const allButtons = document.querySelectorAll('.choice-btn');
+        allButtons.forEach(btn => btn.disabled = true);
+
+        if (selectedChoice === correctAnswer) {
+            button.classList.add("correct");
+            document.getElementById("result").innerText = "Richtig!";
+            score++;
+        } else {
+            button.classList.add("wrong");
+            document.getElementById("result").innerText = `Falsch! Die richtige Antwort ist: ${correctAnswer}`;
+            const correctButton = Array.from(allButtons).find(btn => btn.innerText === correctAnswer);
+            correctButton.classList.add("correct");  // Ensure the correct answer button is highlighted
+        }
+
+        document.getElementById("loading-bar-container").style.display = "block";
+        document.getElementById("loading-bar").style.width = "0%";
+
+        let width = 0;
+        const interval = setInterval(() => {
+            width += 3.33;
+            document.getElementById("loading-bar").style.width = width + "%";
+
+            if (width >= 100) {
+                clearInterval(interval);
+                nextQuestion();
+            }
+        }, 100);
+
+        document.getElementById("next-btn").style.display = "block";
+    }
+
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < randomizedQuestions.length) {
+            showQuestion();
+        } else {
+            endGame();
+        }
+    }
+
+    async function endGame() {
+        const qualifies = await checkHighScore();
+
+        if (qualifies) {
+            const container = document.getElementById("game-container");
+            container.innerHTML = `
+                <h1>Spiel vorbei!</h1>
+                <p>Deine Punktzahl: ${score} von ${randomizedQuestions.length}</p>
+                <form id="highscore-form">
+                    <label for="player_name">Du gehörst zu den Top 10! Gib deinen Namen ein:</label>
+                    <input type="text" id="player_name" name="player_name" required>
+                    <input type="hidden" id="score" name="score" value="${score}">
+                    <input type="hidden" id="category" name="category" value="${selectedCategory}">
+                    <button type="submit">Eintragen</button>
+                </form>
+                <button onclick="location.reload()">Nochmal spielen</button>
+            `;
+            document.getElementById("highscore-form").onsubmit = submitHighScore;
+        } else {
+            displayTopScores();
+        }
+    }
+
+    async function checkHighScore() {
+        const response = await fetch(`/check_highscore/${selectedCategory}/${score}`);
+        const data = await response.json();
+        return data.qualifies;
+    }
+
+    async function submitHighScore(event) {
+        event.preventDefault();
+        const playerName = document.getElementById("player_name").value;
+        const score = document.getElementById("score").value;
+        const category = document.getElementById("category").value;
+
+        await fetch('/add_highscore', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ player_name: playerName, score: score, category: category }),
+        });
+
+        displayTopScores();
+    }
+
+    async function displayTopScores() {
+        const response = await fetch(`/high_scores/${selectedCategory}`);
+        const scores = await response.json();
+
+        const container = document.getElementById("game-container");
+        container.innerHTML = `
+            <h1>Top 10 High Scores</h1>
+            <table class="highscore-table">
+                <thead>
+                    <tr>
+                        <th>Rang</th>
+                        <th>Name</th>
+                        <th>Punkte</th>
+                        <th>Datum</th>
+                    </tr>
+                </thead>
+                <tbody id="highscore-list"></tbody>
+            </table>
+            <button onclick="location.reload()">Nochmal spielen</button>
+        `;
+
+        const highscoreList = document.getElementById("highscore-list");
+        scores.forEach((score, index) => {
+            const listItem = document.createElement("tr");
+            listItem.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${score.player_name}</td>
+                <td>${score.score}</td>
+                <td>${score.timestamp}</td>
+            `;
+            highscoreList.appendChild(listItem);
+        });
+    }
+</script>
+
+
+    <div class="logo-container">
+        <a href="/">
+            <img src="{{ url_for('static', filename='icons/icon-192x192.png') }}" alt="QQLogo" class="logo">
+        </a>
+    </div>
+
+    <div class="container" id="game-container">
+        <div id="intro">
+            <h2>Versuche, die richtige Antwort zu finden!</h2>
+            <button onclick="startGame('{{ category }}')">Spiel starten</button>
+        </div>
+
+        <div id="question-screen" style="display:none;">
+            <div class="question-container">
+                <h2 id="question-text"></h2>
+            </div>
+            <div id="choices"></div>
+            <div class="result" id="result"></div>
+
+            <div id="loading-bar-container" style="display: none;">
+                <div id="loading-bar"></div>
+            </div>
+
+            <button id="next-btn" onclick="nextQuestion()">Nächste Frage</button>
+        </div>
+    </div>
+</body>
+</html>
