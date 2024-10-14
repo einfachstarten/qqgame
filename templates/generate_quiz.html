@@ -3,138 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KI-gestützte Quiz-Erstellung</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #ff79c6, #8be9fd);
-            color: #fff;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
-
-        .container {
-            margin: 50px auto;
-            padding: 20px;
-            max-width: 700px;
-            background-color: #1e1e2f;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            border: 3px solid #f1c40f;
-        }
-
-        h1 {
-            color: #f1c40f;
-            font-family: 'Impact', sans-serif;
-            letter-spacing: 2px;
-            text-shadow: 1px 1px 3px #000;
-            animation: titleAnimation 1.5s ease-in-out infinite alternate;
-        }
-
-        label {
-            font-size: 18px;
-            color: #fff;
-        }
-
-        input[type="text"], input[type="number"] {
-            width: 90%;
-            padding: 10px;
-            margin: 15px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            transition: transform 0.2s ease-in-out, background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #2980b9;
-            transform: scale(1.1);
-        }
-
-        textarea {
-            width: 90%;
-            padding: 10px;
-            margin-top: 15px;
-            height: 200px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        #quiz-preview-section {
-            display: none;
-        }
-
-        #confirm-quiz {
-            margin-top: 15px;
-            background-color: #2ecc71;
-        }
-
-        #confirm-quiz:hover {
-            background-color: #27ae60;
-        }
-    </style>
+    <title>Neues Spiel mit KI hinzufügen</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin_style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>KI-gestützte Quiz-Erstellung</h1>
+        <h1>Neues Spiel mit KI hinzufügen</h1>
+        <form method="POST" action="{{ url_for('generate_quiz_with_ai') }}">
+            <div class="form-group">
+                <label for="category_name">Spielname:</label>
+                <input type="text" id="category_name" name="category_name" placeholder="Spielname eingeben" required>
+            </div>
 
-        <!-- Formular zur Quiz-Erstellung -->
-        <form id="quiz-form">
-            <label for="quiz-topic">Thema des Quiz:</label>
-            <input type="text" id="quiz-topic" placeholder="z.B. Technologie" required>
+            <div class="form-group">
+                <label for="question_count">Anzahl der Fragen:</label>
+                <input type="number" id="question_count" name="question_count" placeholder="Anzahl der Fragen" required>
+            </div>
 
-            <label for="quiz-count">Anzahl der Fragen:</label>
-            <input type="number" id="quiz-count" min="1" max="20" value="5" required>
-
-            <button type="submit">Quiz erstellen</button>
+            <button type="submit" class="btn btn-add">Quiz generieren</button>
         </form>
 
-        <!-- Vorschau der generierten Fragen -->
-        <div id="quiz-preview-section">
-            <h3>Vorschau der generierten Fragen:</h3>
-            <textarea id="quiz-preview" readonly></textarea>
-            <button id="confirm-quiz">Fragen übernehmen</button>
-        </div>
+        <a href="{{ url_for('admin') }}" class="btn btn-back">Zurück zum Admin-Panel</a>
     </div>
-
-    <script>
-        document.getElementById('quiz-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            const topic = document.getElementById('quiz-topic').value;
-            const questionCount = document.getElementById('quiz-count').value;
-
-            // API-Anfrage an den Server zur Quiz-Erstellung
-            const response = await fetch('/generate_quiz', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ topic, questionCount }),
-            });
-
-            const result = await response.json();
-            
-            // Zeige die generierten Fragen als Vorschau an
-            document.getElementById('quiz-preview-section').style.display = 'block';
-            document.getElementById('quiz-preview').value = result.csv;
-
-            // Optional: Funktion zur Bestätigung des Quiz
-            document.getElementById('confirm-quiz').style.display = 'block';
-        });
-    </script>
 </body>
 </html>

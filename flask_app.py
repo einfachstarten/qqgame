@@ -252,6 +252,21 @@ def admin_category_questions(category):
         logging.warning(f"[Admin] No questions found for category {category}.")
     return render_template('admin_category.html', category=category, questions=questions)
     
+@app.route('/generate_quiz_with_ai', methods=['GET', 'POST'])
+def generate_quiz_with_ai():
+    if request.method == 'POST':
+        category_name = request.form.get('category_name')
+        question_count = request.form.get('question_count')
+
+        # Hier wird die Funktion zum Generieren der Fragen über OpenAI aufgerufen (später implementieren)
+        # generate_questions_with_openai(category_name, question_count)
+
+        logging.info(f"Neues KI-generiertes Quiz erstellt: {category_name} mit {question_count} Fragen.")
+        # Leite zum Admin-Panel um
+        return redirect(url_for('admin'))
+
+    return render_template('generate_quiz.html')  # Die neue Seite zum Erstellen eines Quizzes mit KI
+    
 
 # =====================================================
 # 6. QUESTION MANAGEMENT - ADD, EDIT, DELETE

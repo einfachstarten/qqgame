@@ -1,9 +1,8 @@
-2024-10-14 07:41:11,781 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 07:41:11,783 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:41:42,152 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 07:41:42,153 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:41:52,096 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 07:41:52,097 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:46:03,681 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:46:11,723 INFO: [flask_app] [Admin] Fetching questions for category: Allgemeinwissen (schwierig) in admin portal.
-2024-10-14 07:46:11,728 INFO: [flask_app] [Admin/Quiz] Fetching questions for category: Allgemeinwissen (schwierig)
+2024-10-14 09:09:21,165 INFO: [flask_app] [Quiz] Rendering home page with category selection.
+2024-10-14 09:09:21,166 INFO: [flask_app] [Admin] Fetching categories from the database.
+2024-10-14 09:09:22,918 INFO: [flask_app] [Admin] Fetching categories from the database.
+2024-10-14 09:09:37,426 INFO: [flask_app] [Quiz] Rendering quiz page for category: Past Simple I (2. Gymnasium)
+2024-10-14 09:09:37,431 INFO: [flask_app] [Admin/Quiz] Fetching questions for category: Past Simple I (2. Gymnasium)
+2024-10-14 09:09:38,829 INFO: [flask_app] [Quiz] Fetching questions for category Past Simple I (2. Gymnasium) as JSON.
+2024-10-14 09:10:31,506 INFO: [flask_app] [Quiz] Rendering home page with category selection.
+2024-10-14 09:10:31,507 INFO: [flask_app] [Admin] Fetching categories from the database.

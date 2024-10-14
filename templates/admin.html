@@ -35,6 +35,9 @@
             <input type="text" name="category_name" placeholder="Neuer Spielname" required>
             <button type="submit" class="btn btn-add">Spiel hinzufügen</button>
         </form>
+
+        <h2>Neues Spiel mit KI hinzufügen</h2>
+        <a href="{{ url_for('generate_quiz_with_ai') }}" class="btn btn-add">Neues Spiel mit KI hinzufügen</a>
     </div>
 </body>
 </html>
