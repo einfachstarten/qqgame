@@ -1,9 +1,13 @@
-2024-10-14 07:41:11,781 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 07:41:11,783 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:41:42,152 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 07:41:42,153 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:41:52,096 INFO: [flask_app] [Quiz] Rendering home page with category selection.
-2024-10-14 07:41:52,097 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:46:03,681 INFO: [flask_app] [Admin] Fetching categories from the database.
-2024-10-14 07:46:11,723 INFO: [flask_app] [Admin] Fetching questions for category: Allgemeinwissen (schwierig) in admin portal.
-2024-10-14 07:46:11,728 INFO: [flask_app] [Admin/Quiz] Fetching questions for category: Allgemeinwissen (schwierig)
+2024-10-15 11:26:42,329 INFO: [flask_app] [Quiz] Rendering home page with category selection.
+2024-10-15 11:26:42,330 INFO: [flask_app] [Admin] Fetching categories from the database.
+2024-10-15 11:26:44,709 INFO: [flask_app] [Admin] Fetching categories from the database.
+2024-10-15 11:26:46,493 INFO: [flask_app] [Flask App] Start der Quizgenerierung mit KI.
+2024-10-15 11:26:46,494 INFO: [flask_app] [Flask App] GET-Request: Quizgenerierungsseite wird angezeigt.
+2024-10-15 11:27:30,487 INFO: [flask_app] [Flask App] Start der Quizgenerierung mit KI.
+2024-10-15 11:27:30,488 INFO: [flask_app] [Flask App] Quiz Titel: Formel 1 Allgemeinwissen, Thema: Allgemeine Fragen über die Formel 1, sowohl aktuell als auch historisch, Anzahl der Fragen: 15, Sprache: Deutsch
+2024-10-15 11:27:30,489 INFO: [flask_app] [Flask App] Senden der Anfrage an OpenAI API...
+2024-10-15 11:27:43,640 INFO: [_client] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-15 11:27:43,644 INFO: [flask_app] [Flask App] OpenAI API Anfrage gesendet.
+2024-10-15 11:27:43,644 INFO: [flask_app] [Flask App] OpenAI API Antwort erfolgreich empfangen.
+2024-10-15 11:28:11,120 INFO: [flask_app] [Flask App] Start des Speichervorgangs für das generierte Quiz.
+2024-10-15 11:28:11,122 ERROR: [flask_app] [Flask App] Ein Fehler ist beim Speichern des Quizzes aufgetreten: list indices must be integers or slices, not str

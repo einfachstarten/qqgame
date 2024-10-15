@@ -35,6 +35,11 @@
             <input type="text" name="category_name" placeholder="Neuer Spielname" required>
             <button type="submit" class="btn btn-add">Spiel hinzufügen</button>
         </form>
+        <h2>KI-Support</h2>
+        <a href="{{ url_for('generate_quiz_with_ai') }}">
+    <button class="btn btn-add">Quiz mit KI-Unterstützung erstellen</button>
+</a>
+
     </div>
 </body>
 </html>

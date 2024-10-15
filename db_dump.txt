@@ -1,0 +1,377 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE Spezialquiz_für_Projektmanager (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+            choice1 TEXT NOT NULL,
+            choice2 TEXT NOT NULL,
+            choice3 TEXT NOT NULL,
+            choice4 TEXT NOT NULL,
+            correct_index INTEGER NOT NULL
+        );
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(1,'Welcher der folgenden Begriffe gehört nicht zu den fünf Phasen des Projektmanagements?','Initiierung','Planung','Verhandlung','Abschluss',3);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(2,'Was ist das Hauptziel des Risikomanagements in einem Projekt?','Risikobewertung und -überwachung','Risiken komplett zu vermeiden','Risiken zu ignorieren','Projektkosten zu reduzieren',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(3,'Welche Methode wird oft zur Visualisierung des Projektzeitplans verwendet?','Gantt-Diagramm','Netzwerkdiagramm','SWOT-Analyse','WBS (Work Breakdown Structure)',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(4,'Was ist die Definition des kritischen Pfads in der Projektplanung?','Der längste Pfad durch den Projektzeitplan','Der kürzeste Pfad durch den Projektzeitplan','Der kostenintensivste Pfad','Der risikoreichste Pfad',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(5,'Welcher Projektmanagement-Ansatz ist agil und iterativ?','Scrum','Wasserfallmodell','PRINCE2','Lean',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(6,'Welche Rolle ist in einem Scrum-Team für die Einhaltung der Regeln und Prozesse verantwortlich?','Scrum Master','Product Owner','Projektleiter','Entwicklungsteam',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(7,'Was versteht man unter dem Begriff ''Scope Creep''?','Ungenehmigte Ausweitung des Projektumfangs','Zu strikte Einhaltung des Projektumfangs','Plötzliche Reduktion der Ressourcen','Fehler im Projektplan',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(8,'Welche Methode wird häufig zur Kostenplanung im Projekt verwendet?','Earned Value Management','SWOT-Analyse','Risk Breakdown Structure','Kanban',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(9,'Welche Projektmanagement-Methode betont den kontinuierlichen Verbesserungsprozess?','Kaizen','Six Sigma','Lean','Scrum',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(10,'Was bezeichnet der Begriff ''Meilenstein'' im Projektmanagement?','Ein wichtiges Ereignis oder eine Entscheidung','Der Abschluss des Projekts','Die Bereitstellung zusätzlicher Ressourcen','Die Eröffnung eines neuen Projekts',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(11,'Welche Phase im Projektmanagement beinhaltet die Identifizierung von Stakeholdern?','Initiierung','Umsetzung','Überwachung','Abschluss',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(12,'Was ist das Ziel eines Kick-off-Meetings?','Projektteam und Stakeholder über Projektziele zu informieren','Das Projekt zu beenden','Projektrisiken zu identifizieren','Das Budget festzulegen',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(13,'Welches Risiko kann durch ein Kommunikationsmanagementplan minimiert werden?','Missverständnisse zwischen Teammitgliedern','Ressourcenknappheit','Schlechte Zeitschätzung','Fehlende Finanzierung',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(14,'Was versteht man unter der Earned Value Analyse?','Methode zur Messung des Projektfortschritts','Technik zur Reduktion von Projektkosten','Analyse von Projektrisiken','Methode zur Identifikation von Stakeholdern',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(15,'Was ist die Hauptaufgabe des Product Owners im Scrum?','Definition und Priorisierung der Anforderungen','Überwachung der Zeitpläne','Testen der Software','Leitung des Teams',1);
+INSERT INTO "Spezialquiz_für_Projektmanager" VALUES(16,'Wie wird der Zweite in einem Wettkampf noch genannt?','Verlierer','Auch ganz gut','Lederhosen','Vorletzter',1);
+CREATE TABLE Fußballquiz_1 (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+            choice1 TEXT NOT NULL,
+            choice2 TEXT NOT NULL,
+            choice3 TEXT NOT NULL,
+            choice4 TEXT NOT NULL,
+            correct_index INTEGER NOT NULL
+        );
+INSERT INTO "Fußballquiz_1" VALUES(1,'Wer gewann die FIFA-Weltmeisterschaft 2018?','Deutschland','Frankreich','Brasilien','Argentinien',2);
+INSERT INTO "Fußballquiz_1" VALUES(2,'Wie viele Spieler hat ein Team auf dem Spielfeld beim Fußball?','9','10','11','12',3);
+INSERT INTO "Fußballquiz_1" VALUES(3,'Welcher Spieler wird oft als der beste Fußballer aller Zeiten bezeichnet?','Cristiano Ronaldo','Pelé','Lionel Messi','Diego Maradona',3);
+INSERT INTO "Fußballquiz_1" VALUES(4,'Was ist die maximale Dauer eines Fußballspiels (ohne Verlängerung)?','60 Minuten','70 Minuten','90 Minuten','120 Minuten',3);
+INSERT INTO "Fußballquiz_1" VALUES(5,'Welches Land hat die meisten Weltmeistertitel gewonnen?','Deutschland','Argentinien','Italien','Brasilien',4);
+INSERT INTO "Fußballquiz_1" VALUES(6,'Wie nennt man den Schiedsrichterassistenten an der Seitenlinie?','Linienrichter','Torwart','Trainer','Zuschauer',1);
+INSERT INTO "Fußballquiz_1" VALUES(7,'Welcher englische Verein hat die meisten Premier-League-Titel?','Chelsea','Manchester City','Liverpool','Manchester United',4);
+INSERT INTO "Fußballquiz_1" VALUES(8,'Wie nennt man die höchste Liga im deutschen Fußball?','Bundesliga','Premier League','Serie A','La Liga',1);
+INSERT INTO "Fußballquiz_1" VALUES(9,'In welchem Land wurde die erste Fußballweltmeisterschaft ausgetragen?','Brasilien','Deutschland','Uruguay','Italien',3);
+INSERT INTO "Fußballquiz_1" VALUES(10,'Wie viele Punkte gibt es für einen Sieg in der Fußball-Bundesliga?','1','2','3','4',3);
+INSERT INTO "Fußballquiz_1" VALUES(11,'Welcher deutsche Verein hat die meisten Champions-League-Titel gewonnen?','Borussia Dortmund','Schalke 04','Bayern München','Bayer Leverkusen',3);
+INSERT INTO "Fußballquiz_1" VALUES(12,'Welcher Fußballer ist für den "Hand Gottes"-Vorfall bekannt?','Lionel Messi','Cristiano Ronaldo','Diego Maradona','Zinedine Zidane',3);
+INSERT INTO "Fußballquiz_1" VALUES(13,'Welches Team hat die Champions League 2021 gewonnen?','Real Madrid','Manchester City','Paris Saint-Germain','Chelsea',4);
+INSERT INTO "Fußballquiz_1" VALUES(14,'Wie viele Teams nehmen an einer Fußball-Weltmeisterschaft teil?','16','24','32','40',3);
+INSERT INTO "Fußballquiz_1" VALUES(15,'Wer gilt als bester Torschütze der Champions League?','Zinedine Zidane','Lionel Messi','Cristiano Ronaldo','Luis Suárez',3);
+INSERT INTO "Fußballquiz_1" VALUES(16,'Welches Land hat die Europameisterschaft 2021 gewonnen?','Spanien','Frankreich','Italien','Portugal',3);
+INSERT INTO "Fußballquiz_1" VALUES(17,'Wer ist aktuell (Stand 2024) der teuerste Fußballspieler der Welt?','Kylian Mbappé','Lionel Messi','Cristiano Ronaldo','Neymar',1);
+INSERT INTO "Fußballquiz_1" VALUES(18,'Wie nennt man die Entscheidung per Schießen nach einem Unentschieden?','Punktesystem','Elfmeterschießen','Geldstrafen','Torlinienentscheidung',2);
+INSERT INTO "Fußballquiz_1" VALUES(19,'Welcher Verein ist für den Slogan „You’ll Never Walk Alone“ bekannt?','Manchester United','FC Barcelona','Real Madrid','Liverpool FC',4);
+CREATE TABLE Fun_Facts_aus_aller_Welt (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+            choice1 TEXT NOT NULL,
+            choice2 TEXT NOT NULL,
+            choice3 TEXT NOT NULL,
+            choice4 TEXT NOT NULL,
+            correct_index INTEGER NOT NULL
+        );
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(1,'Welches Land hat kein offizielles Militär?','Costa Rica','Island','Neuseeland','Monaco',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(2,'Wie viele Augen hat ein typischer Bienenstock insgesamt?','50.000','100.000','150.000','200.000',3);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(3,'Was ist das kleinste Land der Welt?','Monaco','Malta','Liechtenstein','Vatikanstadt',4);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(4,'Welcher Vogel kann rückwärts fliegen?','Kolibri','Adler','Papagei','Pinguin',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(5,'In welchem Land wurde die Schokolade erfunden?','Mexiko','Schweiz','Belgien','Deutschland',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(6,'Welche Stadt hat die meisten Brücken weltweit?','Venedig','New York','Amsterdam','Hamburg',4);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(7,'Was ist die heißeste jemals gemessene Temperatur auf der Erde?','56.7°C','45.6°C','67.8°C','39.2°C',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(8,'Welcher Planet in unserem Sonnensystem hat die meisten Monde?','Jupiter','Saturn','Neptun','Uranus',2);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(9,'Welche Währung wurde 2016 durch den Bitcoin als erste Kryptowährung im Wert überholt?','Pfund Sterling','US-Dollar','Yen','Euro',2);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(10,'Wie nennt man die Angst vor langen Wörtern?','Hippopotomonstrosesquippedaliophobie','Arachibutyrophobie','Agoraphobie','Glossophobie',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(11,'Welches Säugetier kann nicht springen?','Elefant','Nashorn','Flusspferd','Giraffe',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(12,'Welches Tier schläft bis zu 22 Stunden pro Tag?','Koala','Faultier','Känguru','Panda',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(13,'Was ist das größte Binnenland der Welt?','Kasachstan','Mongolei','Afghanistan','Usbekistan',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(14,'Welche Stadt war einst als Byzantium bekannt?','Istanbul','Athen','Rom','Jerusalem',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(15,'Welcher Staat in den USA hat die meisten Vulkane?','Hawaii','Alaska','Kalifornien','Washington',2);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(16,'Wie lange dauert ein Jahr auf dem Planeten Venus?','225 Erdentage','365 Erdentage','687 Erdentage','12 Erdentage',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(17,'Welches Land hat die meisten Zeitzonen?','Russland','USA','Kanada','Frankreich',4);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(18,'Welches Organ im menschlichen Körper regeneriert sich selbst?','Leber','Niere','Herz','Milz',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(19,'Welches Tier hat das stärkste Immunsystem?','Hai','Kakerlake','Nacktmull','Komodowaran',4);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(20,'Welcher Fluss ist der längste der Welt?','Nil','Amazonas','Jangtse','Dnjepr',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(21,'Wie viele Knochen hat ein Baby bei der Geburt?','206','350','450','300',4);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(22,'Welcher Ozean ist der größte der Welt?','Atlantik','Indischer Ozean','Pazifik','Südpolarmeer',3);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(23,'Welche ist die tiefste bekannte Stelle im Meer?','Marianengraben','Atlantikgraben','Tonga-Graben','Puerto-Rico-Graben',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(24,'Welches ist das am häufigsten gesprochene Wort der Welt?','Hallo','Okay','Ja','Tschüss',2);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(25,'Welches Land verbraucht am meisten Schokolade pro Kopf?','Schweiz','Belgien','Deutschland','USA',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(26,'Wie viele Herzen hat ein Oktopus?','3','2','4','1',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(27,'Was ist das schwerste Tier der Welt?','Blauwal','Elefant','Weißer Hai','Nilpferd',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(28,'In welchem Jahr wurde das Internet für die Öffentlichkeit zugänglich?','1989','1993','1990','1995',2);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(29,'Was ist die älteste bekannte Zivilisation?','Mesopotamien','Ägypten','Römisches Reich','Indus-Kultur',1);
+INSERT INTO Fun_Facts_aus_aller_Welt VALUES(30,'Welches Land besitzt die längste Küstenlinie der Welt?','Kanada','Indonesien','Norwegen','Australien',1);
+CREATE TABLE ADAC_Wissensquiz (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+            choice1 TEXT NOT NULL,
+            choice2 TEXT NOT NULL,
+            choice3 TEXT NOT NULL,
+            choice4 TEXT NOT NULL,
+            correct_index INTEGER NOT NULL
+        );
+INSERT INTO ADAC_Wissensquiz VALUES(1,'Wann wurde der ADAC gegründet?','1903','1925','1950','1970',1);
+INSERT INTO ADAC_Wissensquiz VALUES(2,'Wie viele Mitglieder hat der ADAC (Stand 2024)?','ca. 21 Millionen','ca. 15 Millionen','ca. 10 Millionen','ca. 5 Millionen',1);
+INSERT INTO ADAC_Wissensquiz VALUES(3,'Welches Symbol ist das offizielle Logo des ADAC?','Gelber Hintergrund mit schwarzen Buchstaben','Blauer Adler','Grünes Dreieck','Schwarzes Auto',1);
+INSERT INTO ADAC_Wissensquiz VALUES(4,'Welchen Service bietet der ADAC an?','Pannenhilfe','Steuerberatung','Immobilienfinanzierung','Krankenversicherung',1);
+INSERT INTO ADAC_Wissensquiz VALUES(5,'Wie nennt sich das bekannte ADAC Magazin?','ADAC Motorwelt','ADAC Autojournal','ADAC Fahrspaß','ADAC Mobilitätsmagazin',1);
+INSERT INTO ADAC_Wissensquiz VALUES(6,'In welchem Jahr startete der ADAC seine Luftrettung (ADAC Luftrettung)?','1970','1980','1995','2005',1);
+INSERT INTO ADAC_Wissensquiz VALUES(7,'Wie viele Hubschrauber umfasst die ADAC Luftrettungsflotte (Stand 2024)?','mehr als 50','20-30','10-15','40-50',1);
+INSERT INTO ADAC_Wissensquiz VALUES(8,'Welches Fahrzeug ist für die ADAC Pannenhilfe charakteristisch?','Gelbes Auto','Blauer Van','Rotes Motorrad','Grüner Bus',1);
+INSERT INTO ADAC_Wissensquiz VALUES(9,'Welche Art von Versicherung bietet der ADAC an?','Reiseversicherung','Lebensversicherung','Haftpflichtversicherung','Immobilienversicherung',1);
+INSERT INTO ADAC_Wissensquiz VALUES(10,'Wie viele Länder umfasst die ADAC Auslandshilfe?','42','50','38','20',1);
+INSERT INTO ADAC_Wissensquiz VALUES(11,'Welche technische Hilfe leistet der ADAC vor allem?','Pannenhilfe','Steuererklärung','Rechtsberatung','Gebäudereinigung',1);
+INSERT INTO ADAC_Wissensquiz VALUES(12,'Wie nennt der ADAC seine Helikopter für die Luftrettung?','Christoph','Adler','Berlin','Berghubschrauber',1);
+INSERT INTO ADAC_Wissensquiz VALUES(13,'Welche Art von Schulungen bietet der ADAC für Autofahrer an?','Fahrsicherheitstrainings','Rechtskurse','Wirtschaftskurse','Sprachkurse',1);
+INSERT INTO ADAC_Wissensquiz VALUES(14,'In welchem Jahr wurde die ADAC Stiftung gegründet?','2017','2000','1995','1980',1);
+INSERT INTO ADAC_Wissensquiz VALUES(15,'Was bedeutet die Abkürzung ADAC?','Allgemeiner Deutscher Automobil-Club','Autonomer Deutscher Auto-Club','Automobiler Deutscher Assoziations-Club','Allround Deutscher Auto-Club',1);
+INSERT INTO ADAC_Wissensquiz VALUES(16,'In welchem Jahr startete der ADAC die ADAC Formel Masters?','2008','2000','1995','2010',1);
+INSERT INTO ADAC_Wissensquiz VALUES(17,'Welche Leistung bietet der ADAC für Radfahrer an?','Pannenhilfe','Rechtsberatung','Schulungen','Versicherung',1);
+INSERT INTO ADAC_Wissensquiz VALUES(18,'Welche ADAC Sektion ist bekannt für Luftrettung?','ADAC Luftrettung','ADAC Straßenhilfe','ADAC Bundesrettung','ADAC Nationalhilfe',1);
+INSERT INTO ADAC_Wissensquiz VALUES(19,'Welche Art von Reiseführern gibt der ADAC heraus?','ADAC Reiseführer','Kochbücher','Gesundheitsbücher','Geschichtsbücher',1);
+INSERT INTO ADAC_Wissensquiz VALUES(20,'Was ist das ADAC Fahrsicherheitszentrum?','Ein Übungsgelände für Fahrsicherheitstrainings','Ein Forschungszentrum','Ein Museum','Ein Fahrschulzentrum',1);
+INSERT INTO ADAC_Wissensquiz VALUES(21,'Welcher Motorsport wird vom ADAC gefördert?','Motocross','Skirennen','Tennis','Segeln',1);
+INSERT INTO ADAC_Wissensquiz VALUES(22,'Welche ADAC Tochtergesellschaft bietet Leasing an?','ADAC Finanzdienste','ADAC Reisen','ADAC Versicherungen','ADAC Mobilitätsdienste',1);
+INSERT INTO ADAC_Wissensquiz VALUES(23,'In welchem Jahr startete der ADAC seine Mobilitätspartnerschaft mit der Deutschen Bahn?','2012','2000','2010','2015',1);
+INSERT INTO ADAC_Wissensquiz VALUES(24,'Welcher ADAC Service hilft bei rechtlichen Problemen?','ADAC Rechtsberatung','ADAC Steuerservice','ADAC Versicherungsberatung','ADAC Immobilienberatung',1);
+INSERT INTO ADAC_Wissensquiz VALUES(25,'Was bietet der ADAC zusätzlich zu Pannenhilfe an?','Reiseinformationen','IT-Support','Fitnesskurse','Steuerberatung',1);
+INSERT INTO ADAC_Wissensquiz VALUES(26,'In wie vielen europäischen Ländern bietet der ADAC Pannenhilfe an?','39','15','20','10',1);
+INSERT INTO ADAC_Wissensquiz VALUES(27,'Wie nennt der ADAC seine größte jährliche Veranstaltung?','ADAC GT Masters','ADAC Autowelt','ADAC Sporttour','ADAC Motorshow',1);
+INSERT INTO ADAC_Wissensquiz VALUES(28,'Wie finanziert sich der ADAC hauptsächlich?','Mitgliedsbeiträge','Staatliche Unterstützung','Steuererleichterungen','Spenden',1);
+INSERT INTO ADAC_Wissensquiz VALUES(29,'Welche ADAC Leistung gibt es für Motorradfahrer?','Pannenhilfe','Reiseversicherung','Gesundheitskurse','Rechtsberatung',1);
+INSERT INTO ADAC_Wissensquiz VALUES(30,'Welche ADAC Aktion kümmert sich um Sicherheit im Straßenverkehr?','Sicherheit für alle','Fit im Verkehr','Kinder sicher unterwegs','Tempo runter',1);
+CREATE TABLE Past_Simple_I_2_Gymnasium_Fragen (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+            choice1 TEXT NOT NULL,
+            choice2 TEXT NOT NULL,
+            choice3 TEXT NOT NULL,
+            choice4 TEXT NOT NULL,
+            correct_index INTEGER NOT NULL
+        );
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(1,'Choose the correct Past Simple form of the verb "go"','goes','went','gone','going',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(2,'Choose the correct Past Simple form of the verb "eat"','eated','eats','ate','eating',3);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(3,'Choose the correct Past Simple form of the verb "see"','saw','sees','seen','seeing',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(4,'Choose the correct Past Simple form of the verb "have"','has','had','having','have',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(5,'Choose the correct Past Simple form of the verb "take"','taked','took','taken','taking',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(6,'Choose the correct Past Simple form of the verb "make"','made','makes','maked','making',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(7,'Choose the correct Past Simple form of the verb "run"','runned','ran','runs','run',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(8,'Choose the correct Past Simple form of the verb "write"','writed','wrote','written','writing',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(9,'Choose the correct Past Simple form of the verb "read"','readed','read','reads','reading',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(10,'Choose the correct Past Simple form of the verb "drink"','drank','drunk','drinks','drinking',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(11,'Choose the correct Past Simple form of the verb "begin"','begins','began','begun','beginning',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(12,'Choose the correct Past Simple form of the verb "come"','came','comes','comed','coming',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(13,'Choose the correct Past Simple form of the verb "give"','gave','gived','gives','giving',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(14,'Choose the correct Past Simple form of the verb "know"','knew','known','knows','knowing',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(15,'Choose the correct Past Simple form of the verb "speak"','spoke','spoken','speaks','speaking',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(16,'Choose the correct Past Simple form of the verb "find"','finded','found','finding','finds',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(17,'Choose the correct Past Simple form of the verb "buy"','buyed','bought','buys','buying',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(18,'Choose the correct Past Simple form of the verb "think"','thought','thinked','thinks','thinking',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(19,'Choose the correct Past Simple form of the verb "feel"','felt','feels','feeling','feel',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(20,'Choose the correct Past Simple form of the verb "leave"','leaved','left','leaving','leaves',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(21,'Choose the correct Past Simple form of the verb "stand"','stood','standed','stands','standing',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(22,'Choose the correct Past Simple form of the verb "send"','sended','sent','sends','sending',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(23,'Choose the correct Past Simple form of the verb "hear"','heard','heared','hears','hearing',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(24,'Choose the correct Past Simple form of the verb "fall"','falled','fallen','falls','fell',4);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(25,'Choose the correct Past Simple form of the verb "meet"','meet','met','meeting','meets',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(26,'Choose the correct Past Simple form of the verb "break"','broke','broken','breaks','breaking',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(27,'Choose the correct Past Simple form of the verb "choose"','choosed','chooses','chose','choosing',3);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(28,'Choose the correct Past Simple form of the verb "drive"','drove','driven','drives','driving',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(29,'Choose the correct Past Simple form of the verb "sleep"','sleeped','slept','sleeping','sleeps',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_Fragen VALUES(30,'Choose the correct Past Simple form of the verb "teach"','teached','taught','teaching','teaches',2);
+CREATE TABLE categories (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL UNIQUE
+                     );
+INSERT INTO categories VALUES(6,'Past Simple I (2. Gymnasium)');
+INSERT INTO categories VALUES(7,'Fortnite Wissen');
+INSERT INTO categories VALUES(8,'Present Simple VS Past Simple (2. Gymnasium)');
+INSERT INTO categories VALUES(11,'Allgemeinwissen (schwierig)');
+INSERT INTO categories VALUES(20,'Psychologie der sozialen Interaktion 2');
+CREATE TABLE Past_Simple_I_2_Gymnasium_ (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+            choice1 TEXT NOT NULL,
+            choice2 TEXT NOT NULL,
+            choice3 TEXT NOT NULL,
+            choice4 TEXT NOT NULL,
+            correct_index INTEGER NOT NULL
+        );
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(1,'Choose the correct Past Simple form of the verb "go"','goes','went','gone','going',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(2,'Choose the correct Past Simple form of the verb "eat"','eated','eats','ate','eating',3);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(3,'Choose the correct Past Simple form of the verb "see"','saw','sees','seen','seeing',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(4,'Choose the correct Past Simple form of the verb "have"','has','had','having','have',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(5,'Choose the correct Past Simple form of the verb "take"','taked','took','taken','taking',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(6,'Choose the correct Past Simple form of the verb "make"','made','makes','maked','making',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(7,'Choose the correct Past Simple form of the verb "run"','runned','ran','runs','run',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(8,'Choose the correct Past Simple form of the verb "write"','writed','wrote','written','writing',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(9,'Choose the correct Past Simple form of the verb "read"','readed','read','reads','reading',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(10,'Choose the correct Past Simple form of the verb "drink"','drank','drunk','drinks','drinking',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(11,'Choose the correct Past Simple form of the verb "begin"','begins','began','begun','beginning',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(12,'Choose the correct Past Simple form of the verb "come"','came','comes','comed','coming',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(13,'Choose the correct Past Simple form of the verb "give"','gave','gived','gives','giving',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(14,'Choose the correct Past Simple form of the verb "know"','knew','known','knows','knowing',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(15,'Choose the correct Past Simple form of the verb "speak"','spoke','spoken','speaks','speaking',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(16,'Choose the correct Past Simple form of the verb "find"','finded','found','finding','finds',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(17,'Choose the correct Past Simple form of the verb "buy"','buyed','bought','buys','buying',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(18,'Choose the correct Past Simple form of the verb "think"','thought','thinked','thinks','thinking',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(19,'Choose the correct Past Simple form of the verb "feel"','felt','feels','feeling','feel',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(20,'Choose the correct Past Simple form of the verb "leave"','leaved','left','leaving','leaves',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(21,'Choose the correct Past Simple form of the verb "stand"','stood','standed','stands','standing',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(22,'Choose the correct Past Simple form of the verb "send"','sended','sent','sends','sending',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(23,'Choose the correct Past Simple form of the verb "hear"','heard','heared','hears','hearing',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(24,'Choose the correct Past Simple form of the verb "fall"','falled','fallen','falls','fell',4);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(25,'Choose the correct Past Simple form of the verb "meet"','meet','met','meeting','meets',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(26,'Choose the correct Past Simple form of the verb "break"','broke','broken','breaks','breaking',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(27,'Choose the correct Past Simple form of the verb "choose"','choosed','chooses','chose','choosing',3);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(28,'Choose the correct Past Simple form of the verb "drive"','drove','driven','drives','driving',1);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(29,'Choose the correct Past Simple form of the verb "sleep"','sleeped','slept','sleeping','sleeps',2);
+INSERT INTO Past_Simple_I_2_Gymnasium_ VALUES(30,'Choose the correct Past Simple form of the verb "teach"','teached','taught','teaching','teaches',2);
+CREATE TABLE Fortnite_Wissen (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+            choice1 TEXT NOT NULL,
+            choice2 TEXT NOT NULL,
+            choice3 TEXT NOT NULL,
+            choice4 TEXT NOT NULL,
+            correct_index INTEGER NOT NULL
+        );
+INSERT INTO Fortnite_Wissen VALUES(1,'In welchem Jahr wurde Fortnite veröffentlicht?','2016','2015','2017','2018',3);
+INSERT INTO Fortnite_Wissen VALUES(2,'Wie viele Spieler können maximal in einem Fortnite Battle Royale-Match teilnehmen?','50','100','150','200',2);
+INSERT INTO Fortnite_Wissen VALUES(3,'Welches Unternehmen hat Fortnite entwickelt?','Epic Games','Ubisoft','Activision','Blizzard',1);
+INSERT INTO Fortnite_Wissen VALUES(4,'Wie heißt die Ingame-Währung von Fortnite?','V-Bucks','Münzen','Credits','Gems',1);
+INSERT INTO Fortnite_Wissen VALUES(5,'Welcher Modus war in Fortnite ursprünglich vor dem Battle Royale-Modus verfügbar?','Rette die Welt','Kreativmodus','Abenteuer','Überleben',1);
+INSERT INTO Fortnite_Wissen VALUES(6,'Wie viele Spieler gibt es in einem Standard-Squad?','2','3','4','5',3);
+INSERT INTO Fortnite_Wissen VALUES(7,'Welches Tanz-Emote wurde durch Fortnite besonders populär?','Floss','Twerk','Dab','Wave',1);
+INSERT INTO Fortnite_Wissen VALUES(8,'Welches berühmte Event fand 2019 in Fortnite statt und zog Millionen von Zuschauern an?','Marshmello Konzert','Travis Scott Konzert','Ninja vs. Tfue Event','Black Hole Event',1);
+INSERT INTO Fortnite_Wissen VALUES(9,'Was ist das Ziel im Fortnite Battle Royale?','Als letzter Spieler oder letztes Team zu überleben','Die meisten Kills erzielen','Den höchsten Turm bauen','Die meisten Ressourcen sammeln',1);
+INSERT INTO Fortnite_Wissen VALUES(10,'Welches seltene Material wird in Fortnite für den Bau von Strukturen verwendet?','Metall','Eisen','Gold','Silber',1);
+INSERT INTO Fortnite_Wissen VALUES(11,'Welches berühmte Ingame-Event hat das Fortnite-Universum in Kapitel 2 vollständig verändert?','Das Schwarze Loch','Die Inselübernahme','Die Alien-Invasion','Das Feuersturm-Event',1);
+INSERT INTO Fortnite_Wissen VALUES(12,'Wie oft werden neue Fortnite-Staffeln (Seasons) normalerweise veröffentlicht?','Alle 10-12 Wochen','Jeden Monat','Alle 6 Monate','Jährlich',1);
+INSERT INTO Fortnite_Wissen VALUES(13,'Was war die erste von Fortnite veranstaltete weltweite Wettbewerbsreihe?','Fortnite World Cup','Fall Skirmish','Winter Royale','Pro-Am Tournament',1);
+INSERT INTO Fortnite_Wissen VALUES(14,'Welche berühmte Gaming-Persönlichkeit machte Fortnite durch seine Streams besonders populär?','Ninja','PewDiePie','Shroud','Dr Disrespect',1);
+INSERT INTO Fortnite_Wissen VALUES(15,'Welcher Marvel-Charakter trat in Fortnite während eines speziellen Events auf?','Thanos','Spider-Man','Iron Man','Hulk',1);
+INSERT INTO Fortnite_Wissen VALUES(16,'Welches Emote wurde als Teil eines speziellen "Star Wars"-Events in Fortnite hinzugefügt?','Die Macht','Laserschwertkampf','Stormtrooper-Tanz','Darth Vader-Emote',1);
+INSERT INTO Fortnite_Wissen VALUES(17,'Welches Tier wurde in Fortnite als erstes zähmbar gemacht?','Wölfe','Haie','Hühner','Bären',1);
+INSERT INTO Fortnite_Wissen VALUES(18,'Wie nennt man die seltenste Gegenstandskategorie in Fortnite?','Legendär','Episch','Selten','Mythisch',4);
+INSERT INTO Fortnite_Wissen VALUES(19,'Welcher Modus in Fortnite beinhaltet Teamkämpfe mit unbegrenztem Respawn?','Team Rumble','50 vs 50','Squads','Creative Battle',1);
+CREATE TABLE Present_Simple_VS_Past_Simple_2_Gymnasium_ (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+            choice1 TEXT NOT NULL,
+            choice2 TEXT NOT NULL,
+            choice3 TEXT NOT NULL,
+            choice4 TEXT NOT NULL,
+            correct_index INTEGER NOT NULL
+        );
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(1,'She __________ (to play) tennis every Sunday.','plays','played','is playing','play',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(2,'Yesterday, they __________ (to visit) the museum.','visit','visited','visits','are visiting',2);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(3,'Tom always __________ (to eat) breakfast at 7 am.','eats','ate','eating','is eating',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(4,'Last week, we __________ (to go) to the cinema.','go','are going','went','gone',3);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(5,'She never __________ (to drink) coffee in the morning.','drinks','drank','is drinking','drink',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(6,'They __________ (to watch) a movie last night.','watch','watched','watches','are watching',2);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(7,'My parents __________ (to work) in an office.','worked','work','are working','works',2);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(8,'We __________ (to travel) to Italy every summer.','travel','traveled','travels','is traveling',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(9,'I __________ (to read) a book last night.','read','reads','am reading','readed',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(10,'He __________ (to run) every morning.','run','runs','ran','is running',2);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(11,'They __________ (to call) me yesterday.','call','called','are calling','calling',2);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(12,'Sarah __________ (to cook) dinner every day.','cooked','cooks','was cooking','cook',2);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(13,'We __________ (to finish) our homework two hours ago.','finish','finished','finishes','are finishing',2);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(14,'He always __________ (to ride) his bike to school.','rides','rode','ride','is riding',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(15,'They __________ (to live) in London last year.','live','lives','lived','are living',3);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(16,'I __________ (to clean) my room every Saturday.','clean','cleaned','cleans','am cleaning',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(17,'She __________ (to learn) English last summer.','learn','learns','learned','is learning',3);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(18,'We __________ (to have) lunch together every Friday.','have','had','are having','has',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(19,'He __________ (to help) me with my homework yesterday.','helped','helps','is helping','help',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(20,'They __________ (to study) for the test last night.','study','studied','are studying','studies',2);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(21,'My brother __________ (to play) football every weekend.','plays','played','is playing','play',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(22,'We __________ (to go) to the park yesterday.','go','goes','going','went',4);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(23,'She __________ (to write) a letter last week.','write','wrote','writes','is writing',2);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(24,'I __________ (to swim) in the lake every summer.','swam','swims','swim','am swimming',3);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(25,'They __________ (to visit) their grandparents every weekend.','visited','visits','visit','are visiting',3);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(26,'He __________ (to start) a new job last month.','start','started','starts','is starting',2);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(27,'We always __________ (to meet) at the café.','meet','met','are meeting','meets',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(28,'They __________ (to buy) a new car last year.','buy','bought','buys','is buying',2);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(29,'I __________ (to visit) Paris every year.','visit','visited','visits','am visiting',1);
+INSERT INTO Present_Simple_VS_Past_Simple_2_Gymnasium_ VALUES(30,'She __________ (to run) a marathon last weekend.','run','runs','ran','was running',3);
+CREATE TABLE Allgemeinwissen_schwierig_ (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+            choice1 TEXT NOT NULL,
+            choice2 TEXT NOT NULL,
+            choice3 TEXT NOT NULL,
+            choice4 TEXT NOT NULL,
+            correct_index INTEGER NOT NULL
+        );
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(1,'Was ist das chemische Symbol für das Element mit der Ordnungszahl 79?','Ag','Au','Pt','Pb',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(2,'Wie lange dauert ein Jahr auf dem Planeten Merkur?','88 Tage','365 Tage','224 Tage','687 Tage',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(3,'Welcher Vulkan ist der höchste aktive Vulkan der Erde?','Mount Etna','Mount St. Helens','Ojos del Salado','Mount Vesuvius',3);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(4,'Welcher französische König wurde als "Sonnenkönig" bekannt?','Ludwig XIV','Ludwig XVI','Franz I','Heinrich IV',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(5,'Welcher Astrophysiker entdeckte die Expansion des Universums?','Stephen Hawking','Edwin Hubble','Carl Sagan','Max Planck',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(6,'Welcher römische Kaiser erklärte das Christentum zur offiziellen Religion des Römischen Reiches?','Konstantin der Große','Julius Caesar','Nero','Hadrian',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(7,'Was ist die tiefste bekannte Stelle im Meer?','Puerto-Rico-Graben','Tonga-Graben','Marianengraben','Java-Graben',3);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(8,'Wie viele Chromosomen hat der Mensch?','44','46','48','50',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(9,'Welches Land hat die meisten aktiven Vulkane der Welt?','Japan','Indonesien','USA','Italien',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(10,'Wie viele Monde hat der Planet Jupiter (Stand 2024)?','79','62','53','67',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(11,'Welche Blutgruppe ist die seltenste?','0 negativ','A positiv','AB negativ','B negativ',3);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(12,'Welcher Planet unseres Sonnensystems hat den größten Durchmesser?','Saturn','Neptun','Jupiter','Uranus',3);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(13,'Welches ist das flächenmäßig größte Land in Afrika?','Südafrika','Algerien','Ägypten','Nigeria',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(14,'Wie heißt das längste Gedicht der Welt?','Beowulf','Ilias','Die Göttliche Komödie','Mahabharata',4);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(15,'Welches Tier hat das größte Gehirn im Verhältnis zu seiner Körpergröße?','Mensch','Delfin','Elefant','Krake',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(16,'Wie viele Zeitungen erscheinen weltweit täglich?','ungefähr 12.000','ungefähr 6.000','ungefähr 24.000','ungefähr 40.000',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(17,'Welches Land hat die meisten Weltkulturerbestätten?','China','Italien','Spanien','Frankreich',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(18,'Wer schrieb das Buch "Krieg und Frieden"?','Leo Tolstoi','Fjodor Dostojewski','Victor Hugo','Hermann Hesse',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(19,'Welcher Nobelpreisträger für Chemie war Mitbegründer der Firma "BASF"?','Carl Bosch','Otto Hahn','Fritz Haber','Paul Langerhans',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(20,'Welcher berühmte Mathematiker entwickelte den Satz des Pythagoras?','Thales','Archimedes','Euklid','Pythagoras',4);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(21,'Welcher Berg gilt als der heiligste im tibetischen Buddhismus?','Mount Kailash','Mount Everest','K2','Annapurna',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(22,'Welches ist das trockenste Nicht-Polargebiet der Welt?','Atacama-Wüste','Death Valley','Sahara','Arabische Wüste',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(23,'Welcher Kontinent hat die meisten Länder?','Afrika','Asien','Europa','Südamerika',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(24,'Welches Bauwerk wurde im Jahr 1163 begonnen und gilt als Meisterwerk der Gotik?','Petersdom','Notre-Dame de Paris','Westminster Abbey','Alhambra',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(25,'Wer gilt als der Erfinder des Periodensystems der Elemente?','Dmitri Mendelejew','Marie Curie','Isaac Newton','Michael Faraday',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(26,'Welche Stadt ist die nördlichste Millionenstadt der Welt?','Oslo','St. Petersburg','Helsinki','Reykjavik',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(27,'Welches ist der längste Fluss der Welt?','Nil','Amazonas','Jangtse','Mississippi',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(28,'Wie lange ist die Chinesische Mauer?','8.852 km','10.000 km','21.196 km','5.500 km',3);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(29,'Wer war der erste Mensch im Weltraum?','John Glenn','Yuri Gagarin','Neil Armstrong','Valentina Tereshkova',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(30,'Welcher US-Präsident trat nach dem Watergate-Skandal zurück?','Richard Nixon','John F. Kennedy','Lyndon B. Johnson','Gerald Ford',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(31,'Wie viele Planeten gibt es in unserem Sonnensystem?','7','8','9','10',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(32,'Wer malte das berühmte Gemälde "Guernica"?','Pablo Picasso','Salvador Dalí','Claude Monet','Edvard Munch',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(33,'Welches chemische Element hat das Symbol "Fe"?','Fluor','Ferrum (Eisen)','Phosphor','Fermium',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(34,'Welches ist das höchste Bauwerk der Welt?','Eiffelturm','Burj Khalifa','Empire State Building','Shanghai Tower',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(35,'Welche Art von Gestein besteht aus verfestigtem Magma?','Granit','Sandstein','Marmor','Kalkstein',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(36,'Welches ist der am häufigsten gesprochene Buchstabe im Englischen?','A','E','O','T',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(37,'Welche Krankheit wurde durch eine weltweite Impfkampagne im Jahr 1980 ausgerottet?','Pocken','Polio','Malaria','Cholera',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(38,'Wer schrieb das Theaterstück "Hamlet"?','William Shakespeare','Fjodor Dostojewski','Victor Hugo','J.R.R. Tolkien',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(39,'Welches Land hat die größte Bevölkerung?','Indien','China','USA','Indonesien',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(40,'Welche Chemikalie gibt Pflanzen ihre grüne Farbe?','Chlorophyll','Carotinoid','Lycopin','Hämoglobin',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(41,'Wie viele Muscheln enthält eine Auster im Durchschnitt?','1','5','10','2',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(42,'Welcher griechische Philosoph war Lehrer von Alexander dem Großen?','Platon','Aristoteles','Sokrates','Epikur',2);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(43,'Wie viele Herzen hat ein Regenwurm?','5','3','1','4',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(44,'Welches Metall ist der beste Stromleiter?','Kupfer','Gold','Silber','Platin',3);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(45,'Welche Stadt war im Mittelalter als "Konstantinopel" bekannt?','Athen','Rom','Byzanz (Istanbul)','Alexandria',3);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(46,'Welches berühmte Dokument wurde 1215 in England unterzeichnet?','Magna Carta','Verfassung der Vereinigten Staaten','Habeas Corpus','Edikt von Nantes',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(47,'Welche chemische Verbindung ist die Hauptursache für den Treibhauseffekt?','Kohlenstoffdioxid','Methan','Distickstoffmonoxid','Ozon',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(48,'Was ist der am weitesten verbreitete Baum auf der Erde?','Fichte','Pinie','Rotbuche','Eiche',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(49,'Welche Stadt ist die älteste kontinuierlich bewohnte Stadt der Welt?','Damaskus','Athen','Jerusalem','Rom',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(50,'Welcher Planet hat die längste Tageslänge (im Vergleich zur Erde)?','Venus','Mars','Jupiter','Saturn',1);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(51,'Welche Währung wird in Japan verwendet?','Yuan','Won','Yen','Baht',3);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(52,'Wer komponierte die berühmte Oper "Die Zauberflöte"?','Ludwig van Beethoven','Richard Wagner','Johann Sebastian Bach','Wolfgang Amadeus Mozart',4);
+INSERT INTO Allgemeinwissen_schwierig_ VALUES(53,'Welches Land gewann die erste Fußballweltmeisterschaft?','Deutschland','Brasilien','Uruguay','Argentinien',3);
+CREATE TABLE Psychologie_der_sozialen_Interaktion_2 (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+            choice1 TEXT NOT NULL,
+            choice2 TEXT NOT NULL,
+            choice3 TEXT NOT NULL,
+            choice4 TEXT NOT NULL,
+            correct_index INTEGER NOT NULL
+        );
+INSERT INTO Psychologie_der_sozialen_Interaktion_2 VALUES(1,'Was versteht man unter dem Begriff ''Soziale Kognition'' in der Psychologie?','Die Wahrnehmung und Interpretation sozialer Informationen.','Die Fähigkeit, in Gruppen mit anderen zu interagieren.','Die Anpassung des eigenen Verhaltens an die Erwartungen anderer.','Die Analyse von Gruppendynamiken und Hierarchien.',1);
+INSERT INTO Psychologie_der_sozialen_Interaktion_2 VALUES(2,'Welche Rolle spielen Spiegelneurone in der sozialen Interaktion?','Sie sind verantwortlich für die Verarbeitung visueller Reize.','Sie ermöglichen Empathie und die Nachahmung anderer Verhaltensweisen.','Sie steuern die motorischen Fähigkeiten beim Sprechen in Gruppen.','Sie regulieren den Hormonhaushalt bei sozialen Situationen.',2);
+INSERT INTO Psychologie_der_sozialen_Interaktion_2 VALUES(3,'Welche Bedeutung hat die nonverbale Kommunikation für soziale Interaktionen?','Nonverbale Signale tragen oft mehr Information und Emotionen als verbale Kommunikation.','Nonverbale Kommunikation ist ausschließlich durch Mimik und Gestik geprägt.','Nonverbale Kommunikation spielt nur in intimen Beziehungen eine Rolle.','Nonverbale Kommunikation hat keinen Einfluss auf die soziale Interaktion.',1);
+INSERT INTO Psychologie_der_sozialen_Interaktion_2 VALUES(4,'Was versteht man unter dem Begriff ''Soziale Normen''?','Allgemeine Regeln und Erwartungen über angemessenes Verhalten in einer Gruppe oder Gesellschaft.','Individuelle Vorlieben und Interessen sozialer Gruppen.','Gesetzliche Vorschriften und Strafen für Fehlverhalten.','Die biologische Basis von sozialen Beziehungen.',1);
+INSERT INTO Psychologie_der_sozialen_Interaktion_2 VALUES(5,'Was sind Konformitätsexperimente in der sozialen Psychologie und was haben sie gezeigt?','Experimente, die die Auswirkungen sozialer Normen auf das individuelle Verhalten untersuchen. Sie haben gezeigt, dass Menschen oft dem sozialen Druck folgen, selbst wenn sie wissen, dass es falsch ist.','Experimente, die die biologischen Ursprünge von gesellschaftlichem Verhalten beleuchten.','Versuche zur Erforschung der Gruppendynamik in sozialen Interaktionen.','Untersuchungen zur Entwicklung von sozialen Bindungen in der Kindheit.',1);
+INSERT INTO Psychologie_der_sozialen_Interaktion_2 VALUES(6,'Was versteht man unter dem Begriff ''Soziale Unterstützung'' und welche Auswirkungen hat sie auf das Wohlbefinden?','Soziale Unterstützung umfasst das Ausmaß, in dem eine Person das Gefühl hat, von anderen anerkannt und akzeptiert zu werden. Es hat positive Auswirkungen auf das psychische und physische Wohlbefinden.','Soziale Unterstützung bezieht sich ausschließlich auf finanzielle Hilfe von Freunden und Familie.','Soziale Unterstützung meint die Anpassung an die sozialen Normen und Erwartungen.','Soziale Unterstützung umfasst die Fähigkeit, sich in sozialen Situationen durchzusetzen.',1);
+DELETE FROM sqlite_sequence;
+INSERT INTO sqlite_sequence VALUES('Spezialquiz_für_Projektmanager',16);
+INSERT INTO sqlite_sequence VALUES('Fußballquiz_1',19);
+INSERT INTO sqlite_sequence VALUES('Fun_Facts_aus_aller_Welt',30);
+INSERT INTO sqlite_sequence VALUES('ADAC_Wissensquiz',30);
+INSERT INTO sqlite_sequence VALUES('Past_Simple_I_2_Gymnasium_Fragen',30);
+INSERT INTO sqlite_sequence VALUES('categories',21);
+INSERT INTO sqlite_sequence VALUES('Past_Simple_I_2_Gymnasium_',30);
+INSERT INTO sqlite_sequence VALUES('Fortnite_Wissen',19);
+INSERT INTO sqlite_sequence VALUES('Present_Simple_VS_Past_Simple_2_Gymnasium_',30);
+INSERT INTO sqlite_sequence VALUES('Allgemeinwissen_schwierig_',53);
+INSERT INTO sqlite_sequence VALUES('Psychologie_der_sozialen_Interaktion_2',6);
+COMMIT;
