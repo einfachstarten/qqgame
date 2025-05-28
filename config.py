@@ -1,2 +1,3 @@
 # config.py
-OPENAI_API_KEY = "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"
+import os
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
