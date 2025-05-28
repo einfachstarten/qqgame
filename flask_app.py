@@ -23,7 +23,6 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-
 # Configure logging
 logging.basicConfig(
     filename=LOG_FILE_PATH,
@@ -63,19 +62,6 @@ def get_categories():
         logging.error(f"[Admin] Error fetching categories: {e}")
         return []
 
-# Function to get categories from the database by ID
-def get_category_by_id(category_id):
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        c.execute("SELECT * FROM categories WHERE id = ?", (category_id,))
-        category = c.fetchone()
-        conn.close()
-        return category
-    except Exception as e:
-        logging.error(f"[Admin] Error fetching category by ID {category_id}: {e}")
-        return None
-
 # Function to check if table exists for a category
 def table_exists(category):
     try:
@@ -112,21 +98,19 @@ def get_questions(category):
         logging.error(f"[Admin/Quiz] Error fetching questions for category {category}: {e}")
         return []
 
-# Check If a question already exists in the category
-def question_exists(category, question_text):
+def reset_highscores_for_category(category):
+    """Setzt alle Highscores für eine bestimmte Kategorie zurück"""
     try:
-        sanitized_name = sanitize_table_name(category)
-        logging.info(f"[Admin] Checking if question exists for category {category}: {question_text}")
-        conn = sqlite3.connect(DB_PATH)
+        logging.info(f"[Admin] Resetting highscores for category: {category}")
+        sanitized_category = sanitize_table_name(category)
+        conn = sqlite3.connect('/home/QQgame/qqgame/highscores.db')
         c = conn.cursor()
-        query = f"SELECT COUNT(1) FROM {sanitized_name} WHERE question = ?"
-        c.execute(query, (question_text,))
-        exists = c.fetchone()[0] > 0
+        c.execute(f"DELETE FROM {sanitized_category}")
+        conn.commit()
         conn.close()
-        return exists
+        logging.info(f"[Admin] Successfully reset highscores for category: {category}")
     except Exception as e:
-        logging.error(f"[Admin] Error checking if question exists: {e}")
-        return False
+        logging.error(f"[Admin] Error resetting highscores for category {category}: {e}")
 
 # =====================================================
 # 3. CATEGORY MANAGEMENT
@@ -160,73 +144,20 @@ def add_category(category_name):
     except Exception as e:
         logging.error(f"[Admin] Error adding category {category_name}: {e}")
 
-# Function to delete a category
-def delete_category(category_id):
-    try:
-        logging.info(f"[Admin] Deleting category with ID: {category_id}")
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        c.execute("SELECT name FROM categories WHERE id = ?", (category_id,))
-        category_name = c.fetchone()
-        if category_name:
-            sanitized_name = sanitize_table_name(category_name[0])
-            c.execute(f"DROP TABLE IF EXISTS {sanitized_name}")
-        c.execute("DELETE FROM categories WHERE id = ?", (category_id,))
-        conn.commit()
-        conn.close()
-        logging.info(f"[Admin] Successfully deleted category with ID: {category_id}")
-    except Exception as e:
-        logging.error(f"[Admin] Error deleting category with ID {category_id}: {e}")
-
 # =====================================================
 # 4. ROUTES
 # =====================================================
-# Home page - Select a category to start the quiz
 @app.route('/')
 def index():
     logging.info("[Quiz] Rendering home page with category selection.")
     categories = get_categories()
-    if not categories:
-        logging.warning("[Quiz] No categories found to display on the home page.")
     return render_template('index.html', categories=categories)
 
-# Start the quiz for a selected category
 @app.route('/quiz/<category>')
 def quiz(category):
     logging.info(f"[Quiz] Rendering quiz page for category: {category}")
     questions = get_questions(category)
-    if not questions:
-        logging.warning(f"[Quiz] No questions found for category {category}.")
     return render_template('quiz.html', questions=questions, category=category)
-
-# Fetch quiz questions as JSON
-@app.route('/quiz_questions/<category>')
-def quiz_questions(category):
-    sanitized_name = sanitize_table_name(category)
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    try:
-        logging.info(f"[Quiz] Fetching questions for category {category} as JSON.")
-        c.execute(f"SELECT question, choice1, choice2, choice3, choice4, correct_index FROM {sanitized_name}")
-        questions = c.fetchall()
-        conn.close()
-
-        # Convert questions to a list of dictionaries
-        questions_list = [
-            {
-                "question": q[0],
-                "choice1": q[1],
-                "choice2": q[2],
-                "choice3": q[3],
-                "choice4": q[4],
-                "correct": q[q[5]]
-            } for q in questions
-        ]
-
-        return jsonify(questions_list)
-    except Exception as e:
-        logging.error(f"[Quiz] Error fetching questions for category {category}: {e}")
-        return jsonify({"error": "Unable to fetch questions"}), 500
 
 # =====================================================
 # 5. ADMIN ROUTES - CATEGORY AND QUESTION MANAGEMENT
@@ -243,33 +174,12 @@ def admin():
     categories = get_categories()
     return render_template('admin.html', categories=categories)
 
-@app.route('/delete_category', methods=['POST'])
-def delete_category_route():
-    category_id = request.form.get('category_id')
-    if category_id:
-        logging.info(f"[Admin] Attempting to delete category with ID: {category_id}")
-        delete_category(category_id)
-    return redirect(url_for('admin'))
-
-# View questions for a specific category
-@app.route('/admin/category/<category>')
-def admin_category_questions(category):
-    logging.info(f"[Admin] Fetching questions for category: {category} in admin portal.")
-    questions = get_questions(category)
-    if not questions:
-        logging.warning(f"[Admin] No questions found for category {category}.")
-    return render_template('admin_category.html', category=category, questions=questions)
-
-
 # ================================================
 # KI PoC
 # ================================================
-
-# Anpassung der KI-Route, um das Speichern zu ermöglichen
 @app.route('/generate_quiz_with_ai', methods=['POST', 'GET'])
 def generate_quiz_with_ai():
     logging.info("[Flask App] Start der Quizgenerierung mit KI.")
-
     if request.method == 'GET':
         logging.info("[Flask App] GET-Request: Quizgenerierungsseite wird angezeigt.")
         return render_template('generate_quiz.html')
@@ -284,323 +194,21 @@ def generate_quiz_with_ai():
             logging.info(f"[Flask App] Quiz Titel: {quiz_title}, Thema: {quiz_topic}, Anzahl der Fragen: {num_questions}, Sprache: {quiz_language}")
             logging.info("[Flask App] Senden der Anfrage an OpenAI API...")
 
-            # OpenAI API Anfrage
+            # OpenAI API request
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": "Du bist ein Assistent zur Erstellung von Quizfragen für Schüler, Lehrer, Studierende. Die Fragen und Antworten müssen faktisch korrekt sein. Auf keinen Fall darf Falschinformation weitergegeben werden."},
-                    {"role": "user", "content": f"Generiere {num_questions} Quizfragen in der Sprache {quiz_language} für das Thema: {quiz_title} - {quiz_topic}. Formatiere das Ergebnis in der folgenden JSON-Struktur: [{{'question': 'string', 'choice1': 'string', 'choice2': 'string', 'choice3': 'string', 'choice4': 'string', 'correct_index': int}}]. Der correct_index muss  1, 2 ,3 oder 4 sein, welche Antwort richtig ist, soll zufällig bestimmt sein."}
+                    {"role": "system", "content": "Du bist ein Assistent zur Erstellung von Quizfragen. Die Fragen und Antworten müssen faktisch korrekt sein."},
+                    {"role": "user", "content": f"Generiere {num_questions} Quizfragen in der Sprache {quiz_language} für das Thema: {quiz_title} - {quiz_topic}. Formatiere das Ergebnis in der folgenden JSON-Struktur: [{'question': 'string', 'choice1': 'string', 'choice2': 'string', 'choice3': 'string', 'choice4': 'string', 'correct_index': int}]."}
                 ]
             )
 
-            logging.info("[Flask App] OpenAI API Anfrage gesendet.")
+            logging.info("[Flask App] OpenAI API Antwort empfangen.")
+            quiz_questions = response.choices[0].message.content
+            logging.debug(f"[Flask App] Generierte Fragen: {quiz_questions}")
 
-            # Schritt 4: Überprüfen der Antwort
-            if response and response.choices:
-                logging.info("[Flask App] OpenAI API Antwort erfolgreich empfangen.")
-                quiz_questions = response.choices[0].message.content
-                logging.debug(f"[Flask App] Generierte Fragen: {quiz_questions}")
-
-                # Rendern der Seite mit den generierten Fragen und dem Speichern-Button
-                return render_template('generate_quiz.html', quiz_title=quiz_title, generated_questions=quiz_questions)
-
-            else:
-                logging.warning("[Flask App] Keine Antwort oder leere Antwort von OpenAI API erhalten.")
-                return render_template('generate_quiz.html', error_message="Keine Fragen generiert.")
+            return render_template('generate_quiz.html', quiz_title=quiz_title, generated_questions=quiz_questions)
 
         except Exception as e:
-            logging.error(f"[Flask App] Ein Fehler ist aufgetreten: {e}")
-            return render_template('generate_quiz.html', error_message="Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.")
-
-
-# =====================================================
-# 6. QUESTION MANAGEMENT - ADD, EDIT, DELETE
-# =====================================================
-@app.route('/admin/category/<category>/add', methods=['POST'])
-def add_question_route(category):
-    question_id = request.form.get('question_id')
-    question_text = request.form.get('question_text')
-    answer1 = request.form.get('answer1')
-    answer2 = request.form.get('answer2')
-    answer3 = request.form.get('answer3')
-    answer4 = request.form.get('answer4')
-    correct_answer = request.form.get('correct_answer')
-
-    # Ensure all fields are filled
-    if not (question_text and answer1 and answer2 and answer3 and answer4 and correct_answer):
-        logging.warning(f"[Admin] Form submission missing required fields for category {category}.")
-        return redirect(url_for('admin_category_questions', category=category))
-
-    if question_id:
-        # Update the existing question
-        logging.info(f"[Admin] Updating question with ID {question_id} in category {category}")
-        update_question(category, question_id, question_text, answer1, answer2, answer3, answer4, correct_answer)
-    else:
-        # Add the new question to the database
-        logging.info(f"[Admin] Adding new question to category: {category}")
-        add_question(category, question_text, answer1, answer2, answer3, answer4, correct_answer)
-
-    return redirect(url_for('admin_category_questions', category=category))
-
-# Function to add a new question to a specific category
-def add_question(category, question_text, choice1, choice2, choice3, choice4, correct_index):
-    try:
-        sanitized_name = sanitize_table_name(category)
-        logging.info(f"[Admin] Adding new question to category: {category} (sanitized as {sanitized_name})")
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        query = f"INSERT INTO {sanitized_name} (question, choice1, choice2, choice3, choice4, correct_index) VALUES (?, ?, ?, ?, ?, ?)"
-        logging.debug(f"[Admin] SQL Query to add question: {query}")
-        c.execute(query, (question_text, choice1, choice2, choice3, choice4, correct_index))
-        conn.commit()
-        conn.close()
-        logging.info(f"[Admin] Successfully added question to {category}")
-    except Exception as e:
-        logging.error(f"[Admin] Error adding question to {category}: {e}")
-
-# Neue Route für das Speichern des Quizzes in der Datenbank
-def validate_correct_index(questions):
-    for question in questions:
-        if question['correct_index'] < 1 or question['correct_index'] > 4:
-            logging.error(f"Ungültiger correct_index für Frage: {question['question']}")
-            return False
-    return True
-
-@app.route('/save_generated_quiz', methods=['POST'])
-def save_generated_quiz():
-    logging.info("[Flask App] Start des Speichervorgangs für das generierte Quiz.")
-
-    try:
-        quiz_title = request.form.get('quiz_title')
-        quiz_questions_json = request.form.get('generated_questions')
-        quiz_questions = json.loads(quiz_questions_json)
-        logging.debug(f"[Flask App] Generierte Fragen nach JSON Parsing: {quiz_questions}")
-
-        # Korrekte Indizes überprüfen
-        if not validate_correct_index(quiz_questions['questions']):
-            logging.error("Fehler beim Speichern: Ungültiger correct_index gefunden.")
-            return jsonify({'status': 'error', 'message': 'Fehlerhafte Fragen mit ungültigem correct_index.'}), 400
-
-        # Rest des Speichervorgangs
-        add_category(quiz_title)
-        for question in quiz_questions['questions']:
-            question_text = question.get('question')
-            choice1 = question.get('choice1')
-            choice2 = question.get('choice2')
-            choice3 = question.get('choice3')
-            choice4 = question.get('choice4')
-            correct_index = question.get('correct_index')
-
-            add_question(quiz_title, question_text, choice1, choice2, choice3, choice4, correct_index)
-            logging.info(f"[Flask App] Frage erfolgreich gespeichert: {question_text}")
-
-        logging.info("[Flask App] Alle generierten Quizfragen erfolgreich gespeichert.")
-        return jsonify({'status': 'success', 'message': 'Quiz erfolgreich gespeichert.'}), 200
-
-    except json.JSONDecodeError as e:
-        logging.error(f"[Flask App] Fehler beim Parsing des JSON: {e}")
-        return jsonify({'status': 'error', 'message': 'Fehler beim Parsing des JSON.'}), 400
-
-    except Exception as e:
-        logging.error(f"[Flask App] Ein Fehler ist beim Speichern des Quizzes aufgetreten: {e}")
-        return jsonify({'status': 'error', 'message': 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.'}), 500
-
-
-# Route to render the edit form for a question
-@app.route('/admin/category/<category>/edit/<int:question_id>', methods=['GET', 'POST'])
-def edit_question(category, question_id):
-    if request.method == 'POST':
-        question_text = request.form.get('question_text')
-        answer1 = request.form.get('answer1')
-        answer2 = request.form.get('answer2')
-        answer3 = request.form.get('answer3')
-        answer4 = request.form.get('answer4')
-        correct_index = request.form.get('correct_index')
-
-        if not (question_text and answer1 and answer2 and answer3 and answer4 and correct_index):
-            logging.warning("[Admin] Form submission missing required fields.")
-            return redirect(url_for('edit_question', category=category, question_id=question_id))
-
-        update_question(category, question_id, question_text, answer1, answer2, answer3, answer4, correct_index)
-        return redirect(url_for('admin_category_questions', category=category))
-
-    question = get_question_by_id(category, question_id)
-    if question is None:
-        logging.error(f"[Admin] Question with ID {question_id} not found.")
-        return redirect(url_for('admin_category_questions', category=category))
-
-    return render_template('edit_question.html', category=category, question=question)
-
-# Function to fetch a single question by its ID
-def get_question_by_id(category, question_id):
-    try:
-        logging.info(f"[Admin] Fetching question with ID {question_id} from category {category}")
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        query = f"SELECT * FROM {sanitize_table_name(category)} WHERE id = ?"
-        c.execute(query, (question_id,))
-        question = c.fetchone()
-        conn.close()
-        return question
-    except Exception as e:
-        logging.error(f"[Admin] Error fetching question with ID {question_id} from category {category}: {e}")
-        return None
-
-# Function to update a question in the database
-def update_question(category, question_id, question_text, choice1, choice2, choice3, choice4, correct):
-    try:
-        sanitized_name = sanitize_table_name(category)
-        logging.info(f"[Admin] Updating question with ID {question_id} in category {category}")
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        query = f"UPDATE {sanitized_name} SET question = ?, choice1 = ?, choice2 = ?, choice3 = ?, choice4 = ?, correct_index = ? WHERE id = ?"
-        c.execute(query, (question_text, choice1, choice2, choice3, choice4, correct, question_id))
-        conn.commit()
-        conn.close()
-        logging.info(f"[Admin] Successfully updated question with ID {question_id} in category {category}")
-    except Exception as e:
-        logging.error(f"[Admin] Error updating question with ID {question_id} in category {category}: {e}")
-
-# Route to handle the deletion of a question
-@app.route('/admin/category/<category>/delete/<int:question_id>', methods=['POST'])
-def delete_question_route(category, question_id):
-    delete_question(category, question_id)
-    return redirect(url_for('admin_category_questions', category=category))
-
-# Function to delete a question by its ID
-def delete_question(category, question_id):
-    try:
-        logging.info(f"[Admin] Deleting question with ID {question_id} from category {category}")
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        query = f"DELETE FROM {sanitize_table_name(category)} WHERE id = ?"
-        c.execute(query, (question_id,))
-        conn.commit()
-        conn.close()
-        logging.info(f"[Admin] Successfully deleted question with ID {question_id} from category {category}")
-    except Exception as e:
-        logging.error(f"[Admin] Error deleting question with ID {question_id} from category {category}: {e}")
-
-# =====================================================
-# 7. FILE UPLOAD (CSV) FOR QUESTIONS
-# =====================================================
-@app.route('/admin/category/<category>/upload', methods=['POST'])
-def upload_questions(category):
-    if 'file' not in request.files:
-        logging.error("[Admin] No file part in the request.")
-        return redirect(url_for('admin_category_questions', category=category))
-
-    file = request.files['file']
-
-    if file.filename == '':
-        logging.error("[Admin] No selected file.")
-        return redirect(url_for('admin_category_questions', category=category))
-
-    if file:
-        try:
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
-            logging.info(f"[Admin] File {filename} uploaded successfully.")
-
-            with open(filepath, 'r', encoding='utf-8') as csvfile:
-                csv_reader = csv.reader(csvfile)
-                for row in csv_reader:
-                    if len(row) == 6:  # Erwartet werden 6 Spalten: question, choice1, choice2, choice3, choice4, correct_index
-                        question_text = row[0]
-                        answer1 = row[1]
-                        answer2 = row[2]
-                        answer3 = row[3]
-                        answer4 = row[4]
-                        correct_index = int(row[5])  # Sicherstellen, dass correct_index eine Zahl ist
-
-                        # Überprüfen, ob die Frage bereits existiert
-                        if not question_exists(category, question_text):
-                            add_question(category, question_text, answer1, answer2, answer3, answer4, correct_index)
-                            logging.info(f"[Admin] Successfully added question: {question_text}")
-                        else:
-                            logging.info(f"[Admin] Skipped duplicate question: {question_text}")
-                    else:
-                        logging.warning(f"[Admin] Incorrect row format in CSV: {row}")
-
-            os.remove(filepath)
-            logging.info(f"[Admin] File {filename} processed and deleted.")
-        except Exception as e:
-            logging.error(f"[Admin] Error processing CSV file: {e}")
-
-    return redirect(url_for('admin_category_questions', category=category))
-
-
-# =====================================================
-# 8. HIGHSCORE FUNCTIONALITY
-# =====================================================
-
-# -----------------------------------------------------
-# Überprüft, ob ein Spieler mit seiner Punktzahl in den Top 10 für eine bestimmte Kategorie ist
-# Diese Route wird aufgerufen, wenn das Quiz beendet ist und die Punktzahl überprüft wird.
-# Sie gibt zurück, ob der Spieler sich mit seiner Punktzahl in die Highscores eintragen darf.
-# -----------------------------------------------------
-@app.route('/check_highscore/<category>/<int:score>')
-def check_highscore(category, score):
-    qualifies = qualifies_for_top_10(category, score)
-    return jsonify({'qualifies': qualifies})
-
-# -----------------------------------------------------
-# Fügt eine neue Highscore in die Datenbank für die jeweilige Kategorie ein.
-# Diese Route wird aufgerufen, wenn der Spieler sich nach dem Quiz für die Top 10 qualifiziert
-# und seinen Namen eingibt. Die Highscore-Daten (Kategorie, Name, Punktzahl) werden
-# an die Datenbank übermittelt und dort gespeichert.
-# -----------------------------------------------------
-@app.route('/add_highscore', methods=['POST'])
-def add_highscore():
-    # Die Daten kommen als JSON vom Frontend (Spielername, Kategorie, Punktzahl)
-    data = request.get_json()
-    category = data.get('category')
-    player_name = data.get('player_name')
-    score = data.get('score')
-
-    # Überprüft, ob alle notwendigen Daten vorhanden sind
-    if not (category and player_name and score):
-        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
-
-    # Fügt den neuen Highscore hinzu
-    add_new_high_score(category, player_name, score)
-    return jsonify({'status': 'success'})
-
-# -----------------------------------------------------
-# Zeigt die Top 10 Highscores für eine bestimmte Kategorie an.
-# Diese Route wird verwendet, um die besten 10 Punktzahlen in einer bestimmten Kategorie zu erhalten
-# und im Frontend (z. B. in der Highscore-Liste oder im Admin-Panel) anzuzeigen.
-# -----------------------------------------------------
-# Route für JSON-Antwort
-@app.route('/high_scores/<category>')
-def high_scores(category):
-    top_scores = get_top_10_scores(category)
-    return jsonify(top_scores)
-
-# Admin Route für Highscores
-@app.route('/admin/high_scores/<category>')
-def admin_high_scores(category):
-    top_scores = get_top_10_scores(category)
-    return render_template('highscores.html', scores=top_scores, category=category, enumerate=enumerate)
-
-
-# -----------------------------------------------------
-# Setzt alle Highscores für eine bestimmte Kategorie zurück.
-# Diese Route wird verwendet, wenn ein Administrator die Highscores für eine Kategorie
-# im Admin-Panel zurücksetzen möchte. Nach dem Zurücksetzen wird der Benutzer
-# wieder auf die Highscore-Seite der Kategorie umgeleitet.
-# -----------------------------------------------------
-@app.route('/admin/category/<category>/reset_highscores', methods=['POST'])
-def reset_highscores(category):
-    reset_highscores_for_category(category)
-    return redirect(url_for('admin_high_scores', category=category))
-
-
-
-# =====================================================
-# 9. APPLICATION START
-# =====================================================
-if __name__ == '__main__':
-    logging.info("Starting Flask application.")
-    app.run(debug=True)
+            logging.error(f"[Flask App] Fehler: {e}")
+            return render_template('generate_quiz.html', error_message="Ein Fehler ist aufgetreten.")

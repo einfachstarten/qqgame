@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -43,3 +44,42 @@
     </div>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neues Spiel mit KI hinzufügen</title>
+</head>
+<body>
+    <h1>Neues Spiel mit KI hinzufügen</h1>
+    <form action="{{ url_for('generate_quiz_with_ai') }}" method="POST">
+        <label for="quiz_title">Spielname:</label>
+        <input type="text" id="quiz_title" name="quiz_title" required placeholder="Spielname eingeben"><br><br>
+
+        <label for="quiz_topic">Thema des Quiz:</label>
+        <input type="text" id="quiz_topic" name="quiz_topic" required placeholder="Thema eingeben"><br><br>
+
+        <label for="num_questions">Anzahl der Fragen:</label>
+        <input type="number" id="num_questions" name="num_questions" required min="1" max="100" placeholder="Anzahl der Fragen"><br><br>
+
+        <label for="quiz_language">Sprache der Fragen:</label>
+        <select id="quiz_language" name="quiz_language" required>
+            <option value="Deutsch">Deutsch</option>
+            <option value="Englisch">Englisch</option>
+            <!-- You can add more language options here -->
+        </select><br><br>
+
+        <button type="submit">Quiz generieren</button>
+    </form>
+
+    {% if generated_questions %}
+        <h2>Generierte Quizfragen</h2>
+        <pre>{{ generated_questions }}</pre>
+    {% endif %}
+
+    <br><a href="{{ url_for('admin') }}">Zurück zum Admin-Panel</a>
+</body>
+</html>
+>>>>>>> c024d4c9bd87f4538d13a0faf0bbe5966f001c3a
