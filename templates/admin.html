@@ -13,16 +13,25 @@
         <div class="category-list">
             {% for category in categories %}
             <div class="category-item">
-                <span>{{ category[1] }}</span>
+                <span>{{ category[1] }}
+                    <small style="color: #666; font-size: 12px;">
+                        ({{ category_question_counts.get(category[1], 0) }} Fragen)
+                    </small>
+                </span>
                 <div class="action-buttons">
-                    <!-- Link zur Bearbeitung der Fragen einer Kategorie -->
+                    <!-- Fragen bearbeiten -->
                     <a href="{{ url_for('admin_category_questions', category=category[1]) }}" class="btn btn-edit">Fragen bearbeiten</a>
-                    <!-- Löschen der Kategorie -->
+
+                    <!-- NEU: Mit KI erweitern -->
+                    <a href="{{ url_for('expand_quiz_with_ai', category=category[1]) }}" class="btn btn-expand">➕ Mit KI erweitern</a>
+
+                    <!-- Kategorie löschen -->
                     <form method="POST" action="{{ url_for('delete_category_route') }}" style="display:inline;">
                         <input type="hidden" name="category_id" value="{{ category[0] }}">
                         <button type="submit" class="btn btn-delete" onclick="return confirm('Bist du sicher, dass du diese Kategorie löschen möchtest?');">Löschen</button>
                     </form>
-                    <!-- Highscore-Link -->
+
+                    <!-- Highscores anzeigen -->
                     <a href="{{ url_for('admin_high_scores', category=category[1]) }}" class="btn btn-highscores">Highscores</a>
                 </div>
             </div>
@@ -35,13 +44,8 @@
             <button type="submit" class="btn btn-add">Spiel hinzufügen</button>
         </form>
 
-        <h2>KI-Support</h2>
-        <a href="{{ url_for('generate_quiz_with_ai') }}">
-            <button class="btn btn-add">Quiz mit KI-Unterstützung erstellen</button>
-        </a>
-        
         <h2>Neues Spiel mit KI hinzufügen</h2>
-        <a href="{{ url_for('generate_quiz_with_ai') }}" class="btn btn-add">Neues Spiel mit KI hinzufügen</a>
+        <a href="{{ url_for('generate_quiz_with_ai') }}" class="btn btn-add">🤖 Neues Spiel mit KI hinzufügen</a>
     </div>
 </body>
 </html>

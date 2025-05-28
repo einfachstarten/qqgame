@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neues Spiel mit KI hinzufügen</title>
+    <title>Quiz "{{ category }}" erweitern</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,6 +23,32 @@
             text-align: center;
             margin-bottom: 30px;
         }
+        .current-info {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        .tips {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+        }
+        .tips h3 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+        .tips ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .tips li {
+            margin-bottom: 5px;
+            color: #856404;
+        }
         .form-group {
             margin-bottom: 20px;
         }
@@ -41,7 +67,7 @@
             box-sizing: border-box;
         }
         button {
-            background-color: #3498db;
+            background-color: #e67e22;
             color: white;
             padding: 12px 30px;
             border: none;
@@ -49,17 +75,16 @@
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s;
-            position: relative;
         }
         button:hover:not(:disabled) {
-            background-color: #2980b9;
+            background-color: #d35400;
         }
         button:disabled {
             background-color: #bdc3c7;
             cursor: not-allowed;
         }
 
-        /* Lade-Spinner Styles */
+        /* Loading Spinner */
         .loading-container {
             display: none;
             text-align: center;
@@ -67,7 +92,7 @@
             background: #f8f9fa;
             border-radius: 10px;
             margin-top: 20px;
-            border-left: 4px solid #3498db;
+            border-left: 4px solid #e67e22;
         }
         .loading-container.show {
             display: block;
@@ -77,7 +102,7 @@
             height: 40px;
             margin: 0 auto 20px;
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
+            border-top: 4px solid #e67e22;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -135,66 +160,47 @@
         .quiz-link:hover {
             background-color: #27ae60;
         }
-
-        /* Formular verstecken während Loading */
         .form-container.hide {
             display: none;
-        }
-
-        .tips {
-            background: #e8f4f8;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid #3498db;
-        }
-        .tips h3 {
-            margin: 0 0 10px 0;
-            color: #2c3e50;
-        }
-        .tips ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-        .tips li {
-            margin-bottom: 5px;
-            color: #34495e;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🤖 Neues Spiel mit KI hinzufügen</h1>
+        <h1>📈 Quiz "{{ category }}" erweitern</h1>
+
+        <div class="current-info">
+            <strong>📊 Aktueller Stand:</strong><br>
+            Das Quiz "{{ category }}" hat derzeit <strong>{{ current_count }} Fragen</strong>.
+        </div>
 
         <div class="tips">
             <h3>💡 Tipps für beste Ergebnisse:</h3>
             <ul>
-                <li><strong>Spezifische Themen:</strong> "Planeten unseres Sonnensystems" statt "Weltraum"</li>
-                <li><strong>Weniger ist mehr:</strong> Starte mit 3-5 Fragen für beste Qualität</li>
-                <li><strong>Eindeutige Fakten:</strong> Vermeide kontroverse oder interpretierbare Themen</li>
-                <li><strong>Geduld:</strong> Die KI-Generierung dauert 10-30 Sekunden</li>
+                <li><strong>Spezifische Unterthemen:</strong> "Mittelalterliche Burgen" statt allgemein "Geschichte"</li>
+                <li><strong>Weniger ist mehr:</strong> 3-5 neue Fragen für beste Qualität</li>
+                <li><strong>Duplikat-Schutz:</strong> Die KI kennt alle bestehenden Fragen und vermeidet Wiederholungen</li>
+                <li><strong>Geduld:</strong> Die Erweiterung dauert 15-45 Sekunden</li>
             </ul>
         </div>
 
         <div class="form-container" id="formContainer">
-            <form id="quizForm" action="{{ url_for('generate_quiz_with_ai') }}" method="POST">
+            <form id="expandForm" method="POST">
                 <div class="form-group">
-                    <label for="quiz_title">Spielname:</label>
-                    <input type="text" id="quiz_title" name="quiz_title" required placeholder="z.B. Weltraum Quiz">
+                    <label for="quiz_topic">Spezifisches Unterthema (optional):</label>
+                    <input type="text" id="quiz_topic" name="quiz_topic"
+                           placeholder="z.B. 'Hauptstädte' oder leer lassen für allgemeines {{ category }}">
                 </div>
 
                 <div class="form-group">
-                    <label for="quiz_topic">Thema des Quiz:</label>
-                    <input type="text" id="quiz_topic" name="quiz_topic" required placeholder="z.B. Planeten und Sterne unseres Sonnensystems">
+                    <label for="num_questions">Anzahl neuer Fragen:</label>
+                    <input type="number" id="num_questions" name="num_questions"
+                           required min="1" max="10" value="3">
+                    <small style="color: #666;">Empfohlung: 3-5 Fragen für beste Qualität</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="num_questions">Anzahl der Fragen:</label>
-                    <input type="number" id="num_questions" name="num_questions" required min="1" max="15" value="5" placeholder="5">
-                </div>
-
-                <div class="form-group">
-                    <label for="quiz_language">Sprache der Fragen:</label>
+                    <label for="quiz_language">Sprache:</label>
                     <select id="quiz_language" name="quiz_language" required>
                         <option value="Deutsch">Deutsch</option>
                         <option value="Englisch">Englisch</option>
@@ -203,29 +209,30 @@
                     </select>
                 </div>
 
-                <button type="submit" id="submitBtn">🤖 Quiz mit KI generieren</button>
+                <button type="submit" id="submitBtn">🔧 Quiz erweitern</button>
             </form>
         </div>
 
-        <!-- Lade-Animation -->
+        <!-- Loading Animation -->
         <div class="loading-container" id="loadingContainer">
             <div class="spinner"></div>
-            <div class="loading-text">🧠 KI erstellt dein Quiz...</div>
+            <div class="loading-text">🔧 Erweitere Quiz...</div>
             <div class="loading-info">
-                ⏳ Dies kann 10-30 Sekunden dauern<br>
-                🔍 Fragen werden auf Qualität geprüft<br>
-                💾 Automatisches Speichern in der Datenbank
+                🧠 KI analysiert bestehende {{ current_count }} Fragen<br>
+                ✨ Neue einzigartige Fragen werden erstellt<br>
+                🔍 Duplikat-Erkennung läuft<br>
+                💾 Automatisches Speichern
             </div>
         </div>
 
-        {% if generated_questions %}
+        {% if result %}
             <div class="result {% if success %}success{% else %}error{% endif %}">
-                {{ generated_questions }}
+                {{ result }}
             </div>
 
-            {% if quiz_created and quiz_title %}
-                <a href="{{ url_for('quiz', category=quiz_title) }}" class="quiz-link">
-                    🎮 Quiz "{{ quiz_title }}" jetzt spielen!
+            {% if success %}
+                <a href="{{ url_for('quiz', category=category) }}" class="quiz-link">
+                    🎮 Erweitertes Quiz jetzt testen!
                 </a>
             {% endif %}
         {% endif %}
@@ -234,7 +241,7 @@
     </div>
 
     <script>
-        document.getElementById('quizForm').addEventListener('submit', function(e) {
+        document.getElementById('expandForm').addEventListener('submit', function(e) {
             // Formular verstecken
             document.getElementById('formContainer').classList.add('hide');
 
@@ -244,7 +251,7 @@
             // Submit-Button deaktivieren
             document.getElementById('submitBtn').disabled = true;
 
-            // Falls aus irgendeinem Grund der Request fehlschlägt, nach 60 Sekunden wieder aktivieren
+            // Timeout nach 60 Sekunden
             setTimeout(function() {
                 document.getElementById('formContainer').classList.remove('hide');
                 document.getElementById('loadingContainer').classList.remove('show');
@@ -252,19 +259,12 @@
             }, 60000);
         });
 
-        // Automatische Validierung der Eingaben
+        // Input-Validierung
         document.getElementById('num_questions').addEventListener('input', function(e) {
             const value = parseInt(e.target.value);
-            if (value > 15) {
-                e.target.value = 15;
-                alert('Maximum 15 Fragen für beste Qualität empfohlen!');
-            }
-        });
-
-        document.getElementById('quiz_topic').addEventListener('input', function(e) {
-            const value = e.target.value;
-            if (value.length > 100) {
-                e.target.value = value.substring(0, 100);
+            if (value > 10) {
+                e.target.value = 10;
+                alert('Maximum 10 neue Fragen empfohlen für beste Qualität!');
             }
         });
     </script>
