@@ -10,6 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Game Hintergrundmusik -->
+    <audio id="gameMusic" loop preload="auto">
+        <source src="{{ url_for('static', filename='qq_game.mp3') }}" type="audio/mpeg">
+        Dein Browser unterstützt das Audio-Element nicht.
+    </audio>
+
     <!-- Animierte Hintergrund-Partikel -->
     <div class="particles" id="particles"></div>
 
@@ -237,7 +243,186 @@
         <div class="loading-text">Lade Fragen...</div>
     </div>
 
-<script src="{{ url_for('static', filename='enhanced_quiz.js') }}"></script>
+    <!-- Music Control Panel - Enhanced Integration -->
+    <div class="music-controls" id="music-controls">
+        <button id="musicToggle" class="music-toggle">
+            <span class="music-icon">🎵</span>
+            <span class="music-text">Musik</span>
+        </button>
+        <div class="volume-control">
+            <span class="volume-icon">🔊</span>
+            <input type="range" id="volumeSlider" class="volume-slider"
+                   min="0" max="1" step="0.1" value="0.3">
+        </div>
+        <div class="music-visualizer" id="music-visualizer">
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+        </div>
+    </div>
+
+    <!-- Enhanced Quiz JavaScript -->
+    <script src="{{ url_for('static', filename='enhanced_quiz.js') }}"></script>
+
+    <!-- Enhanced Music Integration Script -->
+    <script>
+        // Enhanced Music Integration for Quiz Page
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameMusic = document.getElementById('gameMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const musicControls = document.getElementById('music-controls');
+            const musicVisualizer = document.getElementById('music-visualizer');
+
+            let musicEnabled = localStorage.getItem('musicEnabled') !== 'false';
+            let isPlaying = false;
+
+            // Initialize audio settings
+            gameMusic.volume = parseFloat(localStorage.getItem('musicVolume') || '0.3');
+            volumeSlider.value = gameMusic.volume;
+
+            // Update volume slider visual
+            function updateVolumeSlider() {
+                const percentage = (gameMusic.volume * 100) + '%';
+                volumeSlider.style.setProperty('--volume-width', percentage);
+            }
+
+            // Start/Stop music function
+            function toggleGameMusic() {
+                if (musicEnabled && !isPlaying) {
+                    gameMusic.play().then(() => {
+                        isPlaying = true;
+                        musicToggle.innerHTML = '<span class="music-icon">🔇</span><span class="music-text">Stumm</span>';
+                        musicToggle.classList.remove('muted');
+                        musicControls.classList.add('playing');
+                    }).catch(e => {
+                        console.log('Game music play failed:', e);
+                    });
+                } else if (isPlaying) {
+                    gameMusic.pause();
+                    isPlaying = false;
+                    musicToggle.innerHTML = '<span class="music-icon">🎵</span><span class="music-text">Musik</span>';
+                    musicToggle.classList.add('muted');
+                    musicControls.classList.remove('playing');
+                }
+            }
+
+            // Music Toggle Button
+            musicToggle.addEventListener('click', function() {
+                musicEnabled = !musicEnabled;
+                localStorage.setItem('musicEnabled', musicEnabled);
+                toggleGameMusic();
+            });
+
+            // Volume Control
+            volumeSlider.addEventListener('input', function() {
+                gameMusic.volume = this.value;
+                localStorage.setItem('musicVolume', this.value);
+                updateVolumeSlider();
+
+                // Visual feedback for volume change
+                musicControls.classList.add('volume-changing');
+                setTimeout(() => {
+                    musicControls.classList.remove('volume-changing');
+                }, 200);
+            });
+
+            // Audio event listeners
+            gameMusic.addEventListener('play', () => {
+                isPlaying = true;
+                musicControls.classList.add('playing');
+            });
+
+            gameMusic.addEventListener('pause', () => {
+                isPlaying = false;
+                musicControls.classList.remove('playing');
+            });
+
+            gameMusic.addEventListener('ended', () => {
+                // Loop the music
+                if (musicEnabled) {
+                    gameMusic.currentTime = 0;
+                    gameMusic.play();
+                }
+            });
+
+            // Global music control functions for enhanced quiz integration
+            window.startGameMusic = function() {
+                if (musicEnabled) {
+                    gameMusic.play().then(() => {
+                        isPlaying = true;
+                        musicControls.classList.add('playing');
+                        musicToggle.innerHTML = '<span class="music-icon">🔇</span><span class="music-text">Stumm</span>';
+                        musicToggle.classList.remove('muted');
+                    }).catch(e => console.log('Auto-start music failed:', e));
+                }
+            };
+
+            window.stopGameMusic = function() {
+                gameMusic.pause();
+                gameMusic.currentTime = 0;
+                isPlaying = false;
+                musicControls.classList.remove('playing');
+            };
+
+            window.pauseGameMusic = function() {
+                if (isPlaying) {
+                    gameMusic.pause();
+                    musicControls.classList.remove('playing');
+                }
+            };
+
+            window.resumeGameMusic = function() {
+                if (musicEnabled && !isPlaying) {
+                    gameMusic.play().then(() => {
+                        isPlaying = true;
+                        musicControls.classList.add('playing');
+                    });
+                }
+            };
+
+            // Initialize
+            updateVolumeSlider();
+
+            // Set initial button state
+            if (musicEnabled) {
+                musicToggle.innerHTML = '<span class="music-icon">🔇</span><span class="music-text">Stumm</span>';
+                musicToggle.classList.remove('muted');
+            } else {
+                musicToggle.innerHTML = '<span class="music-icon">🎵</span><span class="music-text">Musik</span>';
+                musicToggle.classList.add('muted');
+            }
+
+            // Sound toggle function for compatibility
+            window.toggleSound = function() {
+                musicToggle.click();
+            };
+
+            // Enhanced quiz integration
+            const originalStartGame = window.startGame;
+            if (originalStartGame) {
+                window.startGame = function(category) {
+                    // Start game music when quiz begins
+                    setTimeout(() => {
+                        if (window.startGameMusic) window.startGameMusic();
+                    }, 500);
+
+                    return originalStartGame(category);
+                };
+            }
+
+            const originalEndGame = window.endGame;
+            if (originalEndGame && typeof originalEndGame === 'function') {
+                window.endGame = function() {
+                    // Stop game music when quiz ends
+                    if (window.stopGameMusic) window.stopGameMusic();
+
+                    return originalEndGame();
+                };
+            }
+        });
+    </script>
 
 </body>
 </html>

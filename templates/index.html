@@ -14,7 +14,7 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Styles -->
+    <!-- Enhanced Styles -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='enhanced_index_style.css') }}">
 
     <!-- PWA -->
@@ -50,6 +50,12 @@
 </head>
 
 <body>
+    <!-- Lobby Hintergrundmusik -->
+    <audio id="lobbyMusic" loop preload="auto">
+        <source src="{{ url_for('static', filename='qq_lobby.mp3') }}" type="audio/mpeg">
+        Dein Browser unterstützt das Audio-Element nicht.
+    </audio>
+
     <!-- Loading Screen -->
     <div class="loading-screen" id="loading-screen">
         <div class="loading-spinner"></div>
@@ -308,6 +314,25 @@
         </a>
     </div>
 
+    <!-- Music Control Panel - Enhanced Integration -->
+    <div class="music-controls" id="music-controls">
+        <button id="musicToggle" class="music-toggle">
+            <span class="music-icon">🎵</span>
+            <span class="music-text">Musik</span>
+        </button>
+        <div class="volume-control">
+            <span class="volume-icon">🔊</span>
+            <input type="range" id="volumeSlider" class="volume-slider"
+                   min="0" max="1" step="0.1" value="0.3">
+        </div>
+        <div class="music-visualizer" id="music-visualizer">
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-text">
@@ -326,33 +351,146 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- Enhanced JavaScript with Music Integration -->
     <script src="{{ url_for('static', filename='enhanced_index.js') }}"></script>
 
-    <!-- Additional Styles for Coming Soon and Features -->
+    <!-- Music Integration Script -->
+    <script>
+        // Enhanced Music Integration for Homepage
+        document.addEventListener('DOMContentLoaded', function() {
+            const lobbyMusic = document.getElementById('lobbyMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const musicControls = document.getElementById('music-controls');
+            const musicVisualizer = document.getElementById('music-visualizer');
+
+            let musicEnabled = localStorage.getItem('musicEnabled') !== 'false';
+            let isPlaying = false;
+
+            // Initialize audio settings
+            lobbyMusic.volume = parseFloat(localStorage.getItem('musicVolume') || '0.3');
+            volumeSlider.value = lobbyMusic.volume;
+
+            // Update volume slider visual
+            function updateVolumeSlider() {
+                const percentage = (lobbyMusic.volume * 100) + '%';
+                volumeSlider.style.setProperty('--volume-width', percentage);
+            }
+
+            // Start/Stop music function
+            function toggleMusic() {
+                if (musicEnabled && !isPlaying) {
+                    lobbyMusic.play().then(() => {
+                        isPlaying = true;
+                        musicToggle.innerHTML = '<span class="music-icon">🔇</span><span class="music-text">Stumm</span>';
+                        musicToggle.classList.remove('muted');
+                        musicControls.classList.add('playing');
+                    }).catch(e => {
+                        console.log('Autoplay prevented:', e);
+                        // Fallback: Music after user interaction
+                        document.addEventListener('click', function startOnClick() {
+                            if (musicEnabled) {
+                                lobbyMusic.play().then(() => {
+                                    isPlaying = true;
+                                    musicControls.classList.add('playing');
+                                });
+                            }
+                            document.removeEventListener('click', startOnClick);
+                        }, { once: true });
+                    });
+                } else if (isPlaying) {
+                    lobbyMusic.pause();
+                    isPlaying = false;
+                    musicToggle.innerHTML = '<span class="music-icon">🎵</span><span class="music-text">Musik</span>';
+                    musicToggle.classList.add('muted');
+                    musicControls.classList.remove('playing');
+                }
+            }
+
+            // Music Toggle Button
+            musicToggle.addEventListener('click', function() {
+                musicEnabled = !musicEnabled;
+                localStorage.setItem('musicEnabled', musicEnabled);
+
+                if (musicEnabled) {
+                    lobbyMusic.play().then(() => {
+                        isPlaying = true;
+                        musicToggle.innerHTML = '<span class="music-icon">🔇</span><span class="music-text">Stumm</span>';
+                        musicToggle.classList.remove('muted');
+                        musicControls.classList.add('playing');
+                    }).catch(e => console.log('Play failed:', e));
+                } else {
+                    lobbyMusic.pause();
+                    isPlaying = false;
+                    musicToggle.innerHTML = '<span class="music-icon">🎵</span><span class="music-text">Musik</span>';
+                    musicToggle.classList.add('muted');
+                    musicControls.classList.remove('playing');
+                }
+            });
+
+            // Volume Control
+            volumeSlider.addEventListener('input', function() {
+                lobbyMusic.volume = this.value;
+                localStorage.setItem('musicVolume', this.value);
+                updateVolumeSlider();
+
+                // Visual feedback for volume change
+                musicControls.classList.add('volume-changing');
+                setTimeout(() => {
+                    musicControls.classList.remove('volume-changing');
+                }, 200);
+            });
+
+            // Audio event listeners
+            lobbyMusic.addEventListener('play', () => {
+                isPlaying = true;
+                musicControls.classList.add('playing');
+            });
+
+            lobbyMusic.addEventListener('pause', () => {
+                isPlaying = false;
+                musicControls.classList.remove('playing');
+            });
+
+            lobbyMusic.addEventListener('ended', () => {
+                isPlaying = false;
+                musicControls.classList.remove('playing');
+            });
+
+            // Initialize
+            updateVolumeSlider();
+
+            // Set initial button state
+            if (musicEnabled) {
+                musicToggle.innerHTML = '<span class="music-icon">🔇</span><span class="music-text">Stumm</span>';
+                musicToggle.classList.remove('muted');
+            } else {
+                musicToggle.innerHTML = '<span class="music-icon">🎵</span><span class="music-text">Musik</span>';
+                musicToggle.classList.add('muted');
+            }
+
+            // Auto-start music if enabled
+            if (musicEnabled) {
+                setTimeout(toggleMusic, 1000); // Delay to ensure page is loaded
+            }
+
+            // Enhanced homepage integration
+            if (window.quizHomepage) {
+                // Initialize audio for enhanced homepage
+                window.quizHomepage.initAudio = function() {
+                    return {
+                        lobbyMusic: lobbyMusic,
+                        isPlaying: () => isPlaying,
+                        toggle: toggleMusic
+                    };
+                };
+            }
+        });
+    </script>
+
+    <!-- Additional Styles for Enhanced Features -->
     <style>
-        /* Coming Soon Card */
-        .category-card.coming-soon {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .category-card.coming-soon:hover {
-            transform: translateY(-5px) scale(1.01);
-        }
-
-        .category-card.coming-soon .play-button:disabled {
-            background: var(--surface-lighter);
-            color: var(--text-muted);
-            cursor: not-allowed;
-        }
-
-        .category-card.coming-soon .play-button:disabled:hover {
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Features Section */
+        /* Features Section Styles */
         .features-section {
             margin: 6rem 0 4rem;
             padding: 4rem 2rem;
@@ -415,7 +553,28 @@
             font-size: 1rem;
         }
 
-        /* Responsive adjustments for features */
+        /* Coming Soon Card */
+        .category-card.coming-soon {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .category-card.coming-soon:hover {
+            transform: translateY(-5px) scale(1.01);
+        }
+
+        .category-card.coming-soon .play-button:disabled {
+            background: var(--surface-lighter);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .category-card.coming-soon .play-button:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Mobile Responsive Features */
         @media (max-width: 768px) {
             .features-section {
                 margin: 4rem 0 2rem;
@@ -434,145 +593,6 @@
             .feature-icon {
                 font-size: 2.5rem;
             }
-        }
-
-        /* Advanced hover effects */
-        .category-card {
-            transform-style: preserve-3d;
-        }
-
-        .category-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            border-radius: var(--border-radius-lg);
-        }
-
-        .category-card:hover::after {
-            opacity: 1;
-        }
-
-        /* Glowing effect for logo */
-        .logo {
-            box-shadow:
-                var(--shadow-xl),
-                0 0 0 1px rgba(99, 102, 241, 0.1),
-                0 0 30px rgba(99, 102, 241, 0.2);
-        }
-
-        .logo:hover {
-            box-shadow:
-                0 30px 60px -15px rgba(99, 102, 241, 0.4),
-                0 0 0 1px rgba(99, 102, 241, 0.2),
-                0 0 50px rgba(99, 102, 241, 0.4);
-        }
-
-        /* Keyboard navigation styles */
-        .keyboard-nav .category-card:focus {
-            outline: 3px solid var(--primary-color);
-            outline-offset: 4px;
-            transform: translateY(-5px) scale(1.02);
-        }
-
-        .keyboard-nav .admin-button:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        /* Loading animations */
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        /* Stats animation delays */
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-        .stat-card:nth-child(4) { animation-delay: 0.4s; }
-
-        /* Category cards animation delays */
-        .category-card:nth-child(1) { animation-delay: 0.1s; }
-        .category-card:nth-child(2) { animation-delay: 0.2s; }
-        .category-card:nth-child(3) { animation-delay: 0.3s; }
-        .category-card:nth-child(4) { animation-delay: 0.4s; }
-        .category-card:nth-child(5) { animation-delay: 0.5s; }
-        .category-card:nth-child(6) { animation-delay: 0.6s; }
-
-        /* Body loaded state */
-        body.loaded .header-section {
-            animation: slideDown 0.8s ease-out;
-        }
-
-        body.loaded .main-container {
-            animation: fadeIn 1s ease-out 0.3s both;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* High contrast mode */
-        .high-contrast {
-            --surface: #000000;
-            --surface-light: #333333;
-            --surface-lighter: #666666;
-            --text-primary: #ffffff;
-            --text-secondary: #cccccc;
-            --text-muted: #999999;
-        }
-
-        /* Print styles */
-        @media print {
-            .floating-orbs,
-            .particles,
-            .admin-section,
-            .play-button {
-                display: none !important;
-            }
-
-            body {
-                background: white !important;
-                color: black !important;
-            }
-
-            .category-card {
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--surface);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
         }
     </style>
 </body>
