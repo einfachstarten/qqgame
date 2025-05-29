@@ -3,16 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bitte wähle ein Spiel aus!</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <title>QQ Quizmaster - Teste dein Wissen!</title>
+    <meta name="description" content="Spannende Quiz-Spiele zu verschiedenen Themen. Teste dein Wissen und tritt gegen andere Spieler an!">
+    <meta name="keywords" content="Quiz, Wissen, Spiel, Online, Bildung, Test">
 
+    <!-- Preconnect for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='enhanced_index_style.css') }}">
+
+    <!-- PWA -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='icons/icon-192x192.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192x192.png') }}">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="QQ Quizmaster - Teste dein Wissen!">
+    <meta property="og:description" content="Spannende Quiz-Spiele zu verschiedenen Themen">
+    <meta property="og:image" content="{{ url_for('static', filename='icons/icon-512x512.png', _external=True) }}">
+    <meta property="og:url" content="{{ request.url }}">
+
+    <!-- Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('{{ url_for('static', filename='service-worker.js') }}')
                     .then(function(registration) {
-                        console.log('Service Worker registered with scope:', registration.scope);
+                        console.log('Service Worker registered:', registration.scope);
                     }, function(error) {
                         console.log('Service Worker registration failed:', error);
                     });
@@ -20,30 +48,532 @@
         }
     </script>
 </head>
+
 <body>
-    <!-- Logo -->
-    <div class="logo-container">
-        <img src="{{ url_for('static', filename='icons/icon-192x192.png') }}" alt="Logo" class="logo">
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Lade Quiz-Universum...</div>
     </div>
 
-    <!-- Container for game selection and explanation -->
-    <div class="container">
-        <h1>Bitte wähle ein Spiel aus!</h1>
-        
-        <!-- Explanation text -->
-        <p>Willkommen zum QQ Quizmaster! Wähle eine der folgenden Kategorien und teste dein Wissen zu verschiedenen spannenden Themen. Sei bereit für eine herausfordernde und spaßige Quizreise!</p>
-        
-        <!-- Game categories -->
-        <div class="category-buttons">
-            {% for category in categories %}
-            <a class="category-btn" href="{{ url_for('quiz', category=category[1]) }}">{{ category[1] }}</a>
-            {% endfor %}
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Floating Orbs -->
+    <div class="floating-orbs">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- Particles -->
+    <div class="particles" id="particles-container"></div>
+
+    <!-- Header Section -->
+    <header class="header-section">
+        <div class="logo-container">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='icons/icon-192x192.png') }}" alt="QQ Quizmaster Logo">
+            </div>
         </div>
+
+        <h1 class="main-title">QQ Quizmaster</h1>
+        <p class="subtitle">
+            Entdecke faszinierende Quiz-Welten und stelle dein Wissen auf die Probe!
+            Von Wissenschaft bis Pop-Kultur – hier findest du das perfekte Quiz für dich.
+        </p>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="stat-card" data-stat="quizzes">
+                <div class="stat-icon">🧠</div>
+                <div class="stat-number">{{ categories|length }}</div>
+                <div class="stat-label">Quiz-Kategorien</div>
+            </div>
+
+            <div class="stat-card" data-stat="questions">
+                <div class="stat-icon">❓</div>
+                <div class="stat-number">100</div>
+                <div class="stat-label">Spannende Fragen</div>
+            </div>
+
+            <div class="stat-card" data-stat="players">
+                <div class="stat-icon">👥</div>
+                <div class="stat-number">500</div>
+                <div class="stat-label">Aktive Spieler</div>
+            </div>
+
+            <div class="stat-card" data-stat="rating">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-number">4.8</div>
+                <div class="stat-label">Durchschnittsbewertung</div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="category-section">
+            <h2 class="section-title">Wähle dein Quiz</h2>
+            <p class="section-subtitle">
+                Jedes Quiz bietet einzigartige Herausforderungen und spannende Fakten
+            </p>
+
+            <div class="category-grid">
+                {% for category in categories %}
+                <a class="category-card"
+                   href="{{ url_for('quiz', category=category[1]) }}"
+                   data-category="{{ category[1] }}"
+                   tabindex="0"
+                   role="button"
+                   aria-label="Starte {{ category[1] }} Quiz">
+
+                    <div class="category-header">
+                        <div class="category-icon">
+                            {% if 'Wissenschaft' in category[1] or 'Science' in category[1] %}
+                                🔬
+                            {% elif 'Geschichte' in category[1] or 'History' in category[1] %}
+                                📚
+                            {% elif 'Geografie' in category[1] or 'Geography' in category[1] %}
+                                🌍
+                            {% elif 'Technologie' in category[1] or 'Technology' in category[1] %}
+                                💻
+                            {% elif 'Sport' in category[1] %}
+                                ⚽
+                            {% elif 'Musik' in category[1] or 'Music' in category[1] %}
+                                🎵
+                            {% elif 'Film' in category[1] or 'Movie' in category[1] %}
+                                🎬
+                            {% elif 'Kunst' in category[1] or 'Art' in category[1] %}
+                                🎨
+                            {% elif 'Natur' in category[1] or 'Nature' in category[1] %}
+                                🌿
+                            {% elif 'Weltraum' in category[1] or 'Space' in category[1] %}
+                                🚀
+                            {% elif 'Mathematik' in category[1] or 'Math' in category[1] %}
+                                🔢
+                            {% elif 'Literatur' in category[1] or 'Literature' in category[1] %}
+                                📖
+                            {% else %}
+                                🧩
+                            {% endif %}
+                        </div>
+
+                        <h3 class="category-title">{{ category[1] }}</h3>
+
+                        <div class="category-difficulty">
+                            <div class="difficulty-dots">
+                                {% set difficulty_level = (loop.index % 3) + 1 %}
+                                {% for i in range(1, 4) %}
+                                    <div class="difficulty-dot {% if i <= difficulty_level %}active{% endif %}"></div>
+                                {% endfor %}
+                            </div>
+                            <span class="difficulty-label">
+                                {% if difficulty_level == 1 %}Einfach
+                                {% elif difficulty_level == 2 %}Mittel
+                                {% else %}Schwer
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="category-body">
+                        <p class="category-description">
+                            {% if 'Wissenschaft' in category[1] or 'Science' in category[1] %}
+                                Entdecke die Geheimnisse des Universums und teste dein naturwissenschaftliches Wissen.
+                            {% elif 'Geschichte' in category[1] or 'History' in category[1] %}
+                                Reise durch die Zeit und erforsche bedeutende historische Ereignisse.
+                            {% elif 'Geografie' in category[1] or 'Geography' in category[1] %}
+                                Erkunde Länder, Hauptstädte und geografische Besonderheiten unserer Welt.
+                            {% elif 'Technologie' in category[1] or 'Technology' in category[1] %}
+                                Tauche ein in die Welt der Technik und digitalen Innovation.
+                            {% elif 'Sport' in category[1] %}
+                                Teste dein Wissen über verschiedene Sportarten und berühmte Athleten.
+                            {% elif 'Weltraum' in category[1] or 'Space' in category[1] %}
+                                Erkunde die Weiten des Universums und lerne über Planeten und Sterne.
+                            {% else %}
+                                Spannende Fragen und interessante Fakten warten auf dich!
+                            {% endif %}
+                        </p>
+
+                        <button class="play-button" type="button">
+                            <span class="play-icon">▶️</span>
+                            <span>Jetzt spielen</span>
+                        </button>
+                    </div>
+
+                    <div class="category-stats">
+                        <div class="category-stat">
+                            <span class="category-stat-number">10</span>
+                            <span class="category-stat-label">Fragen</span>
+                        </div>
+                        <div class="category-stat">
+                            <span class="category-stat-number">~5</span>
+                            <span class="category-stat-label">Minuten</span>
+                        </div>
+                        <div class="category-stat">
+                            <span class="category-stat-number">{{ (loop.index * 17 + 23) % 100 + 50 }}</span>
+                            <span class="category-stat-label">Gespielt</span>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+
+                <!-- Coming Soon Card (Optional) -->
+                <div class="category-card coming-soon" tabindex="0">
+                    <div class="category-header">
+                        <div class="category-icon">🚧</div>
+                        <h3 class="category-title">Mehr Quiz kommen bald!</h3>
+                    </div>
+
+                    <div class="category-body">
+                        <p class="category-description">
+                            Wir arbeiten bereits an neuen spannenden Quiz-Kategorien.
+                            Bleib dran für noch mehr Wissensabenteuer!
+                        </p>
+
+                        <button class="play-button" disabled>
+                            <span class="play-icon">⏳</span>
+                            <span>Bald verfügbar</span>
+                        </button>
+                    </div>
+
+                    <div class="category-stats">
+                        <div class="category-stat">
+                            <span class="category-stat-number">?</span>
+                            <span class="category-stat-label">Fragen</span>
+                        </div>
+                        <div class="category-stat">
+                            <span class="category-stat-number">?</span>
+                            <span class="category-stat-label">Minuten</span>
+                        </div>
+                        <div class="category-stat">
+                            <span class="category-stat-number">∞</span>
+                            <span class="category-stat-label">Potenzial</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">Warum QQ Quizmaster?</h2>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Schnelle Runden</h3>
+                    <p class="feature-description">
+                        Jedes Quiz dauert nur wenige Minuten - perfekt für zwischendurch!
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3 class="feature-title">Highscore-System</h3>
+                    <p class="feature-description">
+                        Kämpfe um die besten Plätze und zeige allen dein Wissen!
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">Mobile Optimiert</h3>
+                    <p class="feature-description">
+                        Spiele überall - ob am Desktop, Tablet oder Smartphone!
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3 class="feature-title">Lerne dabei</h3>
+                    <p class="feature-description">
+                        Erweitere dein Wissen mit interessanten Fakten und Erklärungen!
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Admin Button -->
+    <div class="admin-section">
+        <a href="{{ url_for('admin') }}"
+           class="admin-button"
+           title="Admin-Panel (Strg+Shift+A)"
+           aria-label="Zum Admin-Panel">
+            ⚙️
+        </a>
     </div>
 
-    <!-- Copyright at the bottom of the page -->
-    <footer>
-        <p>&copy; einfachstarten.jetzt</p>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-text">
+            <strong>QQ Quizmaster</strong> - Wo Wissen auf Spaß trifft! 🧠✨
+        </div>
+
+        <div class="footer-links">
+            <a href="#" class="footer-link">Datenschutz</a>
+            <a href="#" class="footer-link">Impressum</a>
+            <a href="#" class="footer-link">Kontakt</a>
+            <a href="{{ url_for('admin') }}" class="footer-link">Admin</a>
+        </div>
+
+        <div class="footer-text" style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);">
+            &copy; {{ current_year or 2024 }} einfachstarten.jetzt - Made with ❤️ for knowledge lovers
+        </div>
     </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='enhanced_index.js') }}"></script>
+
+    <!-- Additional Styles for Coming Soon and Features -->
+    <style>
+        /* Coming Soon Card */
+        .category-card.coming-soon {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .category-card.coming-soon:hover {
+            transform: translateY(-5px) scale(1.01);
+        }
+
+        .category-card.coming-soon .play-button:disabled {
+            background: var(--surface-lighter);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .category-card.coming-soon .play-button:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Features Section */
+        .features-section {
+            margin: 6rem 0 4rem;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(6, 182, 212, 0.05));
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--surface-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--surface-light);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-color);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* Responsive adjustments for features */
+        @media (max-width: 768px) {
+            .features-section {
+                margin: 4rem 0 2rem;
+                padding: 2rem 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .feature-icon {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Advanced hover effects */
+        .category-card {
+            transform-style: preserve-3d;
+        }
+
+        .category-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: var(--border-radius-lg);
+        }
+
+        .category-card:hover::after {
+            opacity: 1;
+        }
+
+        /* Glowing effect for logo */
+        .logo {
+            box-shadow:
+                var(--shadow-xl),
+                0 0 0 1px rgba(99, 102, 241, 0.1),
+                0 0 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .logo:hover {
+            box-shadow:
+                0 30px 60px -15px rgba(99, 102, 241, 0.4),
+                0 0 0 1px rgba(99, 102, 241, 0.2),
+                0 0 50px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Keyboard navigation styles */
+        .keyboard-nav .category-card:focus {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 4px;
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .keyboard-nav .admin-button:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Loading animations */
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Stats animation delays */
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Category cards animation delays */
+        .category-card:nth-child(1) { animation-delay: 0.1s; }
+        .category-card:nth-child(2) { animation-delay: 0.2s; }
+        .category-card:nth-child(3) { animation-delay: 0.3s; }
+        .category-card:nth-child(4) { animation-delay: 0.4s; }
+        .category-card:nth-child(5) { animation-delay: 0.5s; }
+        .category-card:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Body loaded state */
+        body.loaded .header-section {
+            animation: slideDown 0.8s ease-out;
+        }
+
+        body.loaded .main-container {
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* High contrast mode */
+        .high-contrast {
+            --surface: #000000;
+            --surface-light: #333333;
+            --surface-lighter: #666666;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --text-muted: #999999;
+        }
+
+        /* Print styles */
+        @media print {
+            .floating-orbs,
+            .particles,
+            .admin-section,
+            .play-button {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+            }
+
+            .category-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
 </body>
 </html>

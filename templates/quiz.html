@@ -3,225 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QQ Quizmaster</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='quiz_style.css') }}">
-    <style>
-        /* Stelle sicher, dass das Logo gerade dargestellt wird */
-        .logo {
-            display: block;
-            margin: 0 auto;
-            transform: rotate(0deg);
-        }
-
-        .logo-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-    </style>
+    <title>QQ Quizmaster - {{ category }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='enhanced_quiz_style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <script>
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let questions = [];
-    let randomizedQuestions = [];
-    let selectedCategory;
+    <!-- Animierte Hintergrund-Partikel -->
+    <div class="particles" id="particles"></div>
 
-    async function startGame(category) {
-        selectedCategory = category;
-        document.getElementById("intro").style.display = "none";
-        document.getElementById("question-screen").style.display = "block";
+    <!-- Timer -->
+    <div class="timer-container hidden" id="timer-container">
+        <div class="timer-circle">
+            <svg class="timer-svg" viewBox="0 0 36 36">
+                <circle class="timer-bg" cx="18" cy="18" r="16"></circle>
+                <circle class="timer-progress" cx="18" cy="18" r="16" id="timer-circle"></circle>
+            </svg>
+            <div class="timer-text" id="timer-text">30</div>
+        </div>
+    </div>
 
-        questions = await fetchQuestions();
-        randomizedQuestions = questions.sort(() => 0.5 - Math.random()).slice(0, 10);
-        showQuestion();
-    }
-
-    async function fetchQuestions() {
-        try {
-            const response = await fetch(`/quiz_questions/${selectedCategory}`);
-            if (!response.ok) {
-                throw new Error('Fehler beim Laden der Fragen');
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Fehler beim Abrufen der Fragen:', error);
-            return [];
-        }
-    }
-
-    function showQuestion() {
-        const questionData = randomizedQuestions[currentQuestionIndex];
-        document.getElementById("question-text").innerText = questionData.question;
-
-        const choicesDiv = document.getElementById("choices");
-        choicesDiv.innerHTML = "";
-
-        const choices = [questionData.choice1, questionData.choice2, questionData.choice3, questionData.choice4];
-        choices.forEach(choice => {
-            const button = document.createElement("button");
-            button.innerText = choice;
-            button.classList.add('choice-btn');
-            button.onclick = () => checkAnswer(button, choice, questionData.correct);
-            choicesDiv.appendChild(button);
-        });
-
-        document.getElementById("result").innerText = "";
-        document.getElementById("next-btn").style.display = "none";
-        document.getElementById("loading-bar-container").style.display = "none";
-    }
-
-        function checkAnswer(button, selectedChoice, correctAnswer) {
-        const allButtons = document.querySelectorAll('.choice-btn');
-        allButtons.forEach(btn => btn.disabled = true);
-
-        if (selectedChoice === correctAnswer) {
-            button.classList.add("correct");
-            document.getElementById("result").innerText = "Richtig!";
-            score++;
-        } else {
-            button.classList.add("wrong");
-            document.getElementById("result").innerText = `Falsch! Die richtige Antwort ist: ${correctAnswer}`;
-            const correctButton = Array.from(allButtons).find(btn => btn.innerText === correctAnswer);
-            correctButton.classList.add("correct");  // Ensure the correct answer button is highlighted
-        }
-
-        document.getElementById("loading-bar-container").style.display = "block";
-        document.getElementById("loading-bar").style.width = "0%";
-
-        let width = 0;
-        const interval = setInterval(() => {
-            width += 3.33;
-            document.getElementById("loading-bar").style.width = width + "%";
-
-            if (width >= 100) {
-                clearInterval(interval);
-                nextQuestion();
-            }
-        }, 100);
-
-        document.getElementById("next-btn").style.display = "block";
-    }
-
-
-    function nextQuestion() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < randomizedQuestions.length) {
-            showQuestion();
-        } else {
-            endGame();
-        }
-    }
-
-    async function endGame() {
-        const qualifies = await checkHighScore();
-
-        if (qualifies) {
-            const container = document.getElementById("game-container");
-            container.innerHTML = `
-                <h1>Spiel vorbei!</h1>
-                <p>Deine Punktzahl: ${score} von ${randomizedQuestions.length}</p>
-                <form id="highscore-form">
-                    <label for="player_name">Du gehörst zu den Top 10! Gib deinen Namen ein:</label>
-                    <input type="text" id="player_name" name="player_name" required>
-                    <input type="hidden" id="score" name="score" value="${score}">
-                    <input type="hidden" id="category" name="category" value="${selectedCategory}">
-                    <button type="submit">Eintragen</button>
-                </form>
-                <button onclick="location.reload()">Nochmal spielen</button>
-            `;
-            document.getElementById("highscore-form").onsubmit = submitHighScore;
-        } else {
-            displayTopScores();
-        }
-    }
-
-    async function checkHighScore() {
-        const response = await fetch(`/check_highscore/${selectedCategory}/${score}`);
-        const data = await response.json();
-        return data.qualifies;
-    }
-
-    async function submitHighScore(event) {
-        event.preventDefault();
-        const playerName = document.getElementById("player_name").value;
-        const score = document.getElementById("score").value;
-        const category = document.getElementById("category").value;
-
-        await fetch('/add_highscore', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ player_name: playerName, score: score, category: category }),
-        });
-
-        displayTopScores();
-    }
-
-    async function displayTopScores() {
-        const response = await fetch(`/high_scores/${selectedCategory}`);
-        const scores = await response.json();
-
-        const container = document.getElementById("game-container");
-        container.innerHTML = `
-            <h1>Top 10 High Scores</h1>
-            <table class="highscore-table">
-                <thead>
-                    <tr>
-                        <th>Rang</th>
-                        <th>Name</th>
-                        <th>Punkte</th>
-                        <th>Datum</th>
-                    </tr>
-                </thead>
-                <tbody id="highscore-list"></tbody>
-            </table>
-            <button onclick="location.reload()">Nochmal spielen</button>
-        `;
-
-        const highscoreList = document.getElementById("highscore-list");
-        scores.forEach((score, index) => {
-            const listItem = document.createElement("tr");
-            listItem.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${score.player_name}</td>
-                <td>${score.score}</td>
-                <td>${score.timestamp}</td>
-            `;
-            highscoreList.appendChild(listItem);
-        });
-    }
-</script>
-
-
-    <div class="logo-container">
-        <a href="/">
-            <img src="{{ url_for('static', filename='icons/icon-192x192.png') }}" alt="QQLogo" class="logo">
+    <!-- Header mit Logo und Progress -->
+    <div class="header">
+        <a href="/" class="logo-link">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='icons/icon-192x192.png') }}" alt="QQ Logo" class="logo-img">
+            </div>
         </a>
-    </div>
-
-    <div class="container" id="game-container">
-        <div id="intro">
-            <h2>Versuche, die richtige Antwort zu finden!</h2>
-            <button onclick="startGame('{{ category }}')">Spiel starten</button>
-        </div>
-
-        <div id="question-screen" style="display:none;">
-            <div class="question-container">
-                <h2 id="question-text"></h2>
+        <div class="progress-container hidden" id="progress-container">
+            <div class="progress-wrapper">
+                <div class="progress-bar" id="progress-bar"></div>
+                <div class="progress-glow" id="progress-glow"></div>
             </div>
-            <div id="choices"></div>
-            <div class="result" id="result"></div>
-
-            <div id="loading-bar-container" style="display: none;">
-                <div id="loading-bar"></div>
-            </div>
-
-            <button id="next-btn" onclick="nextQuestion()">Nächste Frage</button>
+            <div class="progress-text" id="progress-text">Frage 0 von 10</div>
         </div>
     </div>
+
+    <!-- Sound Toggle -->
+    <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()">
+        <span class="sound-icon">🔊</span>
+    </button>
+
+    <!-- Hauptspiel Container -->
+    <div class="game-container" id="game-container">
+        <!-- Intro Screen -->
+        <div class="intro" id="intro">
+            <div class="intro-header">
+                <h1 class="category-title">{{ category }}</h1>
+                <p class="intro-description">
+                    Teste dein Wissen mit spannenden Fragen!
+                    Jede richtige Antwort bringt dir einen Punkt.
+                </p>
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-item">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">Fragen</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">30s</div>
+                    <div class="stat-label">pro Frage</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">🏆</div>
+                    <div class="stat-label">Highscore</div>
+                </div>
+            </div>
+
+            <button class="start-btn" onclick="startGame('{{ category }}')">
+                <span class="btn-icon">🚀</span>
+                <span class="btn-text">Quiz starten</span>
+                <div class="btn-glow"></div>
+            </button>
+
+            <div class="difficulty-selector">
+                <label>Schwierigkeitsgrad:</label>
+                <select id="difficulty" onchange="updateDifficulty()">
+                    <option value="normal">Normal (30s pro Frage)</option>
+                    <option value="hard">Schwer (20s pro Frage)</option>
+                    <option value="expert">Experte (15s pro Frage)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Fragen Screen -->
+        <div class="hidden" id="question-screen">
+            <div class="question-card slide-up" id="question-card">
+                <div class="question-header">
+                    <div class="question-info">
+                        <div class="question-number" id="question-number">Frage 1</div>
+                        <div class="category-badge">{{ category }}</div>
+                    </div>
+                    <div class="score-display" id="score-display">
+                        <span class="score-icon">⭐</span>
+                        <span class="score-text">0</span>
+                    </div>
+                </div>
+
+                <div class="question-content">
+                    <div class="question-text" id="question-text">
+                        <!-- Frage wird hier eingefügt -->
+                    </div>
+                </div>
+
+                <div class="choices-grid" id="choices">
+                    <!-- Antworten werden hier eingefügt -->
+                </div>
+
+                <div class="result-container">
+                    <div class="result hidden" id="result">
+                        <div class="result-icon" id="result-icon"></div>
+                        <div class="result-text" id="result-text"></div>
+                        <div class="result-explanation hidden" id="result-explanation"></div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="next-btn hidden" id="next-btn" onclick="nextQuestion()">
+                        <span class="btn-text">Nächste Frage</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                    <button class="skip-btn" id="skip-btn" onclick="skipQuestion()">
+                        <span class="btn-text">Überspringen</span>
+                        <span class="btn-icon">⏭️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Endergebnis Screen -->
+        <div class="hidden" id="end-screen">
+            <div class="result-card slide-up">
+                <div class="final-result-header">
+                    <div class="result-trophy" id="result-trophy">🏆</div>
+                    <h1 class="final-title">Quiz beendet!</h1>
+                    <div class="final-category">{{ category }}</div>
+                </div>
+
+                <div class="score-breakdown">
+                    <div class="final-score-display">
+                        <div class="score-circle">
+                            <div class="score-number" id="final-score-number">0</div>
+                            <div class="score-total">/10</div>
+                        </div>
+                    </div>
+
+                    <div class="score-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Richtige Antworten:</span>
+                            <span class="detail-value" id="correct-answers">0</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Durchschnittliche Zeit:</span>
+                            <span class="detail-value" id="avg-time">--s</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Genauigkeit:</span>
+                            <span class="detail-value" id="accuracy">--%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Badge -->
+                <div class="performance-badge" id="performance-badge">
+                    <div class="badge-icon" id="badge-icon">🌟</div>
+                    <div class="badge-text" id="badge-text">Gut gemacht!</div>
+                </div>
+
+                <!-- Highscore Eingabe -->
+                <div class="hidden" id="highscore-entry">
+                    <div class="highscore-prompt">
+                        <h3>🌟 Neuer Highscore!</h3>
+                        <p>Du gehörst zu den Top 10 - trage deinen Namen ein:</p>
+                    </div>
+                    <div class="name-input-container">
+                        <input type="text" class="name-input" id="player-name"
+                               placeholder="Dein Name..." maxlength="20"
+                               onkeypress="handleNameKeypress(event)">
+                        <button class="submit-score-btn" onclick="submitHighscore()">
+                            <span class="btn-text">Eintragen</span>
+                            <span class="btn-icon">✨</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Highscore Tabelle -->
+                <div class="highscore-section">
+                    <h3 class="highscore-title">🏆 Top 10 Highscores</h3>
+                    <div class="highscore-table-container">
+                        <table class="highscore-table" id="highscore-table">
+                            <thead>
+                                <tr>
+                                    <th>Rang</th>
+                                    <th>Name</th>
+                                    <th>Punkte</th>
+                                    <th>Datum</th>
+                                </tr>
+                            </thead>
+                            <tbody id="highscore-list">
+                                <!-- Highscores werden hier eingefügt -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="final-actions">
+                    <button class="action-btn primary" onclick="restartGame()">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Nochmal spielen</span>
+                    </button>
+                    <button class="action-btn secondary" onclick="shareResult()">
+                        <span class="btn-icon">📤</span>
+                        <span class="btn-text">Ergebnis teilen</span>
+                    </button>
+                    <button class="action-btn tertiary" onclick="goHome()">
+                        <span class="btn-icon">🏠</span>
+                        <span class="btn-text">Zur Startseite</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay hidden" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Lade Fragen...</div>
+    </div>
+
+<script src="{{ url_for('static', filename='enhanced_quiz.js') }}"></script>
+
 </body>
 </html>
