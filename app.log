@@ -1,0 +1,18 @@
+2025-05-29 18:52:18,134 INFO: [flask_app] [Quiz] Rendering home page with category selection.
+2025-05-29 18:52:18,136 INFO: [flask_app] [Admin] Fetching categories from the database.
+2025-05-29 18:52:24,618 INFO: [flask_app] [Quiz] Rendering home page with category selection.
+2025-05-29 18:52:24,618 INFO: [flask_app] [Admin] Fetching categories from the database.
+2025-05-29 18:53:29,540 INFO: [flask_app] [Quiz] Rendering quiz page for category: Weltraum
+2025-05-29 18:53:29,546 INFO: [flask_app] [Admin/Quiz] Fetching questions for category: Weltraum
+2025-05-29 18:53:33,964 INFO: [flask_app] [Quiz] Fetching questions for category Weltraum as JSON.
+2025-05-29 18:53:33,969 INFO: [flask_app] [Quiz] Successfully fetched 15 questions for category Weltraum
+2025-05-29 18:54:40,155 INFO: [flask_app] [Highscore] Checking if score 7 qualifies for category Weltraum
+2025-05-29 18:54:40,166 INFO: [flask_app] [Highscore] Score 7 for Weltraum qualifies: True
+2025-05-29 18:54:40,332 INFO: [flask_app] [Highscore] Fetching top scores for category Weltraum
+2025-05-29 18:54:40,343 INFO: [flask_app] [Highscore] Found 4 scores for category Weltraum
+2025-05-29 18:54:52,854 INFO: [flask_app] [Highscore] Fetching top scores for category Weltraum
+2025-05-29 18:54:52,862 INFO: [flask_app] [Highscore] Found 5 scores for category Weltraum
+2025-05-29 18:55:03,626 INFO: [flask_app] [Quiz] Rendering home page with category selection.
+2025-05-29 18:55:03,627 INFO: [flask_app] [Admin] Fetching categories from the database.
+2025-05-29 18:55:18,377 INFO: [flask_app] [Quiz] Rendering home page with category selection.
+2025-05-29 18:55:18,377 INFO: [flask_app] [Admin] Fetching categories from the database.
